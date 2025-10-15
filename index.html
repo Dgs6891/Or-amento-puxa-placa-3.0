@@ -760,17 +760,6 @@
           <label>Modelo</label>
           <input id="veic-modelo" type="text" placeholder="Ex: CROSSFOX">
         </div>
-        <div class="col">
-          <label>Submodelo</label>
-          <input id="veic-submodelo" type="text" placeholder="Ex: CROSSFOX">
-        </div>
-        <div class="col">
-          <label>Versão</label>
-          <input id="veic-versao" type="text" placeholder="Ex: CROSSFOX">
-        </div>
-      </div>
-      
-      <div class="row" style="margin-top: 12px;">
         <div class="col col-ano">
           <label>Ano Fabricação</label>
           <input id="veic-ano-fabricacao" type="text" placeholder="2007">
@@ -779,6 +768,9 @@
           <label>Ano Modelo</label>
           <input id="veic-ano-modelo" type="text" placeholder="2007">
         </div>
+      </div>
+      
+      <div class="row" style="margin-top: 12px;">
         <div class="col col-cor">
           <label>Cor</label>
           <input id="veic-cor" type="text" placeholder="Ex: Prata">
@@ -787,6 +779,8 @@
           <label>Km</label>
           <input id="veic-km" type="text" placeholder="123456" maxlength="6" inputmode="numeric" pattern="[0-9]*">
         </div>
+        <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div> 
+        <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div>
       </div>
 
       <h3 style="margin:12px 0 8px 0">Diagnóstico</h3>
@@ -1061,8 +1055,6 @@
   const veicPlaca = document.getElementById('veic-placa');
   const veicMarca = document.getElementById('veic-marca'); 
   const veicModelo = document.getElementById('veic-modelo');
-  const veicSubmodelo = document.getElementById('veic-submodelo');
-  const veicVersao = document.getElementById('veic-versao');
   const veicAnoFabricacao = document.getElementById('veic-ano-fabricacao');
   const veicAnoModelo = document.getElementById('veic-ano-modelo');
   const veicCor = document.getElementById('veic-cor'); 
@@ -1137,7 +1129,7 @@
   // Container para informações do veículo
   const vehicleInfoContainer = document.getElementById('vehicle-info-container');
   const vehicleInfoContent = document.getElementById('vehicle-info-content');
-  const vehicleInfoPagePrint = document.getElementById('vehicle-info-page-print'); // NOVO ELEMENTO
+  const vehicleInfoPagePrint = document.getElementById('vehicle-info-page-print'); 
 
   let editingItemIndex = -1;
   let isDrawing = false;
@@ -1438,12 +1430,11 @@
       veicModelo.value = data.modelo;
       orcamento.veiculoCompleto.informacoesBasicas.modelo = data.modelo;
     }
+    // REMOVIDOS: Submodelo e Versão, mas os dados completos continuam armazenados para o PDF
     if (data.submodelo) {
-      veicSubmodelo.value = data.submodelo;
       orcamento.veiculoCompleto.informacoesBasicas.submodelo = data.submodelo;
     }
     if (data.versao) {
-      veicVersao.value = data.versao;
       orcamento.veiculoCompleto.informacoesBasicas.versao = data.versao;
     }
     if (data.ano) {
@@ -1712,7 +1703,7 @@
     // Lista completa de campos a serem exibidos no PDF
     const fieldsMap = {
       // Básicas
-      marca: 'Marca', modelo: 'Modelo', submodelo: 'Submodelo', versao: 'Versão',
+      marca: 'Marca', modelo: 'Modelo', submodelo: 'Submodelo', versao: 'Versão', // Mantém submodelo/versão no PDF
       anoFabricacao: 'Ano Fabricação', anoModelo: 'Ano Modelo', cor: 'Cor', 
       placa: 'Placa', placaAlternativa: 'Placa Alternativa', chassi: 'Chassi', 
       origem: 'Origem', municipio: 'Município', uf: 'UF',
@@ -1861,37 +1852,47 @@
       if (veicPlaca.value.trim()) texto += `Placa: ${veicPlaca.value}\n`;
       if (veicMarca.value.trim()) texto += `Marca: ${veicMarca.value}\n`;
       if (veicModelo.value.trim()) texto += `Modelo: ${veicModelo.value}\n`;
-      if (veicSubmodelo.value.trim()) texto += `Submodelo: ${veicSubmodelo.value}\n`;
-      if (veicVersao.value.trim()) texto += `Versão: ${veicVersao.value}\n`;
-      if (veicAnoFabricacao.value.trim()) texto += `Ano Fab/Mod: ${veicAnoFabricacao.value}/${veicAnoModelo.value}\n`;
+      // Os campos Submodelo e Versão são omitidos aqui
+      if (veicAnoFabricacao.value.trim() || veicAnoModelo.value.trim()) texto += `Ano Fab/Mod: ${veicAnoFabricacao.value || 'N/I'}/${veicAnoModelo.value || 'N/I'}\n`;
       if (veicCor.value.trim()) texto += `Cor: ${veicCor.value}\n`;
-      if (veicKm.value.trim()) texto += `Km: ${veicKm.value}\n`;
       
-      // Informações completas do veículo (se disponíveis)
+      // KM: Usar o número limpo (armazenado em orcamento.veiculo.km)
+      const kmValue = orcamento.veiculo.km;
+      if (kmValue) {
+          // Apenas o número limpo, sem separador de milhares ou "km"
+          texto += `Km: ${kmValue}\n`;
+      }
+      
+      // NOVO: Informações completas do veículo (se disponíveis)
       if (Object.keys(orcamento.veiculoCompleto.informacoesBasicas).length > 0) {
-        texto += `\n*DADOS COMPLETOS (API):*\n`;
         const basic = orcamento.veiculoCompleto.informacoesBasicas;
         const extra = orcamento.veiculoCompleto.informacoesExtra;
         const fipe = orcamento.veiculoCompleto.informacoesFipe;
         const situacao = orcamento.veiculoCompleto.situacao;
 
-        if (basic.chassi) texto += `Chassi: ${basic.chassi}\n`;
-        if (basic.origem) texto += `Origem: ${basic.origem}\n`;
-        if (extra.combustivel) texto += `Combustível: ${extra.combustivel}\n`;
-        if (extra.cilindradas) texto += `Cilindradas: ${extra.cilindradas}\n`;
-        if (extra.tipo_veiculo) texto += `Tipo: ${extra.tipo_veiculo}\n`;
+        texto += `\n*DADOS COMPLETOS (API):*\n`;
+        // Chassi COMPLETO
+        if (basic.chassi) texto += `Chassi: ${basic.chassi}\n`; 
+        // Origem
+        if (basic.origem) texto += `Origem: ${basic.origem}\n`; 
+        // Combustível
+        if (extra.combustivel) texto += `Combustível: ${extra.combustivel}\n`; 
+        // Cilindradas
+        if (extra.cilindradas) texto += `Cilindradas: ${extra.cilindradas}\n`; 
+        // Tipo (usando 'tipo_veiculo' ou 'especie' da API, se disponível)
+        const tipoVeiculo = extra.tipo_veiculo || extra.especie;
+        if (tipoVeiculo) texto += `Tipo: ${tipoVeiculo}\n`; 
+        // Situação
         if (situacao.situacao) texto += `Situação: ${situacao.situacao}\n`;
+        // Valor FIPE
         if (fipe.texto_valor) texto += `Valor FIPE: ${fipe.texto_valor}\n`;
+
         texto += `---------------------------------\n`;
       }
       
       texto += `\n*DIAGNÓSTICO:*\n${diagnostico.value || 'Não informado'}\n`;
       
-      if (mecanicoResp.value.trim() || consultorResp.value.trim()) {
-          texto += `\n*RESPONSÁVEIS:*\n`;
-          if (mecanicoResp.value.trim()) texto += `Mecânico: ${mecanicoResp.value}\n`;
-          if (consultorResp.value.trim()) texto += `Consultor: ${consultorResp.value}\n`;
-      }
+      // REMOVIDO: A seção RESPONSÁVEIS
       
       texto += `\n*ITENS DO ORÇAMENTO:*\n`;
       
@@ -1901,8 +1902,8 @@
       if (orcamento.itens.length > 0) {
         orcamento.itens.forEach((item, index) => {
           const subtotal = item.qtd * item.valor;
+          // Formato: 1. Descrição (Tipo) - Qtd x ValorUnit = Subtotal
           texto += `${index + 1}. ${item.descricao} (${item.tipo === 'PECA' ? 'Peça' : 'M.O.'}) - ${item.qtd}x ${fmt.format(item.valor)} = ${fmt.format(subtotal)}\n`;
-          if (item.obs && !isWhatsapp) texto += `   Obs: ${item.obs}\n`; // Oculta obs na mensagem concisa
           
           if (item.tipo === 'PECA') totalPecas += subtotal;
           if (item.tipo === 'MDO') totalMDO += subtotal;
@@ -1924,13 +1925,15 @@
       if (garantia.value.trim()) texto += `Garantia: ${garantia.value}\n`;
       if (condicoes.value.trim()) texto += `Pagamento: ${condicoes.value}\n`;
       
-      if (aprovador.value.trim() || dataAprov.value.trim()) {
+      // Seção APROVAÇÃO (condicional, pois não estava no exemplo)
+      if (aprovador.value.trim() || dataAprov.value.trim() || assinatura.value.trim()) {
         texto += `\n*APROVAÇÃO:*\n`;
         if (aprovador.value.trim()) texto += `Aprovador: ${aprovador.value}\n`;
         if (dataAprov.value.trim()) texto += `Data: ${formatDateBr(dataAprov.value)}\n`;
         if (assinatura.value.trim()) texto += `Assinatura: ${assinatura.value}\n`;
       }
       
+      // Omitir OBS INTERNA no WhatsApp, mas incluir na cópia geral
       if (obsInterna.value.trim() && !isWhatsapp) {
         texto += `\n*OBSERVAÇÕES INTERNAS:*\n${obsInterna.value}\n`;
       }
@@ -1953,26 +1956,19 @@
     });
   }
   
+  // CORREÇÃO: Abre o WhatsApp sem número de destino para o usuário escolher o contato
   function enviarWhatsApp() {
-    // Esta função agora envia TODOS os dados, mas com observações internas omitidas.
     const mensagem = getFullMessageText(true); 
-    
-    // Obter o telefone e limpar. Se o telefone não tiver um DDD, o WhatsApp pode falhar.
-    const tel = cleanNumber(clienteTel.value) || ''; 
-    
-    // Codificar a mensagem para URL
     const mensagemCodificada = encodeURIComponent(mensagem);
     
-    // Criar URL do WhatsApp: se houver telefone, tenta enviar direto. Senão, abre a lista de contatos.
-    const urlWhatsApp = tel.length >= 10 ? `https://wa.me/${tel}?text=${mensagemCodificada}` : `https://wa.me/?text=${mensagemCodificada}`;
+    // URL universal do WhatsApp (sem número)
+    const urlWhatsApp = `https://wa.me/?text=${mensagemCodificada}`;
     
-    // Abrir WhatsApp
     window.open(urlWhatsApp, '_blank');
   }
 
   // Inicialização
   function init(){
-    // ... (restante da sua função init) ...
     const saved = localStorage.getItem('orcamento_oficina_v1');
     if(saved){
       try{
@@ -2017,8 +2013,6 @@
   }
   
   function renderAll(){
-    // ... (restante da sua função renderAll) ...
-
     // Cabeçalho e Logo
     const hasLogo = !!orcamento.oficina.logoUrl;
     brandContainerEl.classList.toggle('has-logo', hasLogo);
@@ -2038,10 +2032,9 @@
     veicPlaca.value = orcamento.veiculo.placa ? maskPlaca(orcamento.veiculo.placa) : '';
     
     // Campos do veículo (apenas os básicos para interface)
+    // Os campos submodelo e versão são preenchidos apenas no orcamento.veiculoCompleto, não na UI
     veicMarca.value = orcamento.veiculoCompleto.informacoesBasicas.marca || '';
     veicModelo.value = orcamento.veiculoCompleto.informacoesBasicas.modelo || '';
-    veicSubmodelo.value = orcamento.veiculoCompleto.informacoesBasicas.submodelo || '';
-    veicVersao.value = orcamento.veiculoCompleto.informacoesBasicas.versao || '';
     veicAnoFabricacao.value = orcamento.veiculoCompleto.informacoesBasicas.anoFabricacao || '';
     veicAnoModelo.value = orcamento.veiculoCompleto.informacoesBasicas.anoModelo || '';
     veicCor.value = orcamento.veiculoCompleto.informacoesBasicas.cor || '';
@@ -2258,7 +2251,7 @@
   // Eventos de inputs principais para persistência imediata
   const allInputs = [
     validadeInput, clienteNome, clienteDoc, clienteTel, veicPlaca, veicMarca, veicModelo, 
-    veicSubmodelo, veicVersao, veicAnoFabricacao, veicAnoModelo, veicCor, veicKm,
+    veicAnoFabricacao, veicAnoModelo, veicCor, veicKm, 
     diagnostico, prazo, garantia, condicoes, aprovador, dataAprov, assinatura, obsInterna,
     mecanicoResp, consultorResp 
   ];
