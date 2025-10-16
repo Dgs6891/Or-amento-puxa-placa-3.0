@@ -848,6 +848,91 @@
       display: none !important;
     }
   }
+
+
+.chat-input-container {
+    padding: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: center; /* Adicione esta linha */
+    background: white;
+    position: relative; /* Adicione esta linha */
+}
+
+/* Estilo para o botão fechar dentro do input container */
+.chat-input-container .chat-close {
+    position: static; /* Remove o posicionamento absoluto */
+    transform: none; /* Remove a transformação */
+    background: var(--danger); /* Destaque em vermelho */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.chat-input-container .chat-close:hover {
+    background: #dc2626; /* Vermelho mais escuro no hover */
+    transform: scale(1.05);
+}
+
+/* Ajuste o input para ocupar o espaço restante */
+.chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Mantenha os estilos originais dos outros botões */
+.chat-send, .chat-voice {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .chat-input-container {
+        padding: 12px;
+        gap: 6px;
+    }
+    
+    .chat-input-container .chat-close,
+    .chat-send, 
+    .chat-voice {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+    }
+    
+    .chat-input {
+        font-size: 16px;
+        padding: 10px 14px;
+    }
+}
+
+
+
 </style>
 </head>
 <body>
@@ -856,20 +941,23 @@
   <button id="open-chat" class="chat-toggle no-print">💬</button>
 
   <!-- Container do Chat em tela cheia -->
-  <div id="chat-container" class="chat-container">
-    <div class="chat-header">
-      <h4>🤖 Assistente de Orçamento</h4>
-      <button class="chat-close" id="close-chat" title="Fechar chat">×</button>
-    </div>
-    <div id="chat-messages" class="chat-messages"></div>
-    <div class="chat-input-container">
-      <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua resposta ou use o microfone..." autocomplete="off">
-      <button id="chat-voice" class="chat-voice" title="Falar">🎤</button>
-      <button id="send-chat" class="chat-send">➤</button>
-    </div>
-    <!-- BOTÃO ALTERNATIVO PARA FECHAR NO MOBILE -->
-    <button class="chat-mobile-close" id="close-chat-mobile">Fechar Assistente</button>
+  <!-- Container do Chat em tela cheia -->
+<div id="chat-container" class="chat-container">
+  <div class="chat-header">
+    <h4>🤖 Assistente de Orçamento</h4>
+    <!-- REMOVA O BOTÃO FECHAR DAQUI -->
   </div>
+  <div id="chat-messages" class="chat-messages"></div>
+  <div class="chat-input-container">
+    <!-- ADICIONE O BOTÃO FECHAR AQUI -->
+    <button class="chat-close" id="close-chat" title="Fechar chat">×</button>
+    <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua resposta ou use o microfone..." autocomplete="off">
+    <button id="chat-voice" class="chat-voice" title="Falar">🎤</button>
+    <button id="send-chat" class="chat-send">➤</button>
+  </div>
+  <!-- BOTÃO ALTERNATIVO PARA FECHAR NO MOBILE (mantenha este) -->
+  <button class="chat-mobile-close" id="close-chat-mobile">Fechar Assistente</button>
+</div>
 
   <div class="fixed-actions no-print">
       <button id="btn-config-oficina" title="Configurações da Oficina">⚙️</button>
