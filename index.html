@@ -9,7 +9,7 @@
   :root{
     --bg:#f6f7fb;
     --card:#ffffff;
-    --accent:#0f62fe; /* Azul forte para destacar os valores */
+    --accent:#0f62fe;
     --muted:#6b7280;
     --success:#10b981;
     --danger:#ef4444;
@@ -26,18 +26,320 @@
     -moz-osx-font-smoothing:grayscale;
     padding:24px;
     padding-top: 70px; 
+    overflow-x: hidden;
   }
 
   .container{
     max-width:1100px;
     margin:0 auto;
+    width: 100%;
+    overflow-x: hidden;
   }
 
+  /* ESTILOS DO CHATBOT RESPONSIVO - CORRIGIDOS */
+  .chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+  .chat-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+  }
+
+  .chat-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: none;
+    flex-direction: column;
+    z-index: 1001;
+  }
+
+  .chat-container.active {
+    display: flex;
+  }
+
+  .chat-header {
+    background: var(--accent);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    min-height: 60px;
+  }
+
+  .chat-header h4 {
+    margin: 0;
+    font-size: 18px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .chat-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1002;
+  }
+
+  .chat-close:hover {
+    background: rgba(255,255,255,0.2);
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  .message.bot {
+    background: #f1f3f9;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .message.user {
+    background: var(--accent);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .message.system {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    align-self: center;
+    font-size: 14px;
+    text-align: center;
+    max-width: 90%;
+  }
+
+  .chat-input-container {
+    padding: 15px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    background: white;
+  }
+
+  .chat-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .chat-input:focus {
+    border-color: var(--accent);
+  }
+
+  .chat-send, .chat-voice {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chat-voice.listening {
+    background: var(--danger);
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  .chat-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .chat-btn {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 120px;
+  }
+
+  .chat-btn:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .chat-btn.primary {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  .chat-btn.success {
+    background: var(--success);
+    color: white;
+    border-color: var(--success);
+  }
+
+  .chat-btn.danger {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+  }
+
+  /* BOTÃO DE FECHAR ALTERNATIVO NO RODAPÉ PARA MOBILE */
+  .chat-mobile-close {
+    display: none;
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin: 10px auto;
+    width: 90%;
+    max-width: 200px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    body {
+        padding: 15px;
+        padding-top: 70px;
+    }
+    
+    .chat-container {
+        height: 100vh;
+    }
+    
+    .chat-header {
+      padding: 12px 15px;
+      min-height: 56px;
+    }
+    
+    .chat-header h4 {
+      font-size: 16px;
+      padding-right: 50px;
+    }
+    
+    .chat-close {
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      right: 8px;
+    }
+    
+    .message {
+        font-size: 16px;
+        max-width: 90%;
+    }
+    
+    .chat-input {
+        font-size: 16px;
+    }
+
+    .chat-mobile-close {
+      display: block;
+    }
+
+    .chat-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .chat-btn {
+      width: 100%;
+      max-width: 200px;
+    }
+  }
+
+  /* CORREÇÃO: Botão fechar visível em modo horizontal */
+  @media (max-width: 1024px) and (orientation: landscape) {
+    .chat-header {
+      padding: 10px 15px;
+      min-height: 50px;
+    }
+    
+    .chat-close {
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+      right: 6px;
+    }
+    
+    .chat-header h4 {
+      font-size: 16px;
+      padding-right: 40px;
+    }
+  }
+
+  /* Resto do CSS original */
   header.top{
     display:flex;
     gap:16px;
     align-items:center;
     margin-bottom:18px;
+    flex-wrap: wrap;
   }
   .brand{
     background:linear-gradient(135deg,#ffffff,#f1f6ff);
@@ -48,12 +350,12 @@
     flex-direction:column;
     gap:6px;
     position:relative;
-    flex-grow: 1; 
+    flex-grow: 1;
+    min-width: 0;
   }
   .brand h1{ margin:0; font-size:18px; font-weight:700; color:var(--accent) }
   .brand small{ color:var(--muted); font-size:12px }
 
-  /* Logo Styling */
   .logo-container {
       position: absolute;
       top: 0;
@@ -72,7 +374,7 @@
       display: none;
   }
   .brand.has-logo {
-      padding: 12px 16px 12px 80px; 
+      padding: 12px 16px 12px 80px;
       min-height: 60px;
       display: flex;
       justify-content: center;
@@ -83,8 +385,8 @@
       left: 12px;
       top: 50%;
       transform: translateY(-50%);
-      width: 50px; 
-      height: 50px; 
+      width: 50px;
+      height: 50px;
       background: #f0f4ff;
       border-radius: 6px;
       border: 1px solid var(--border);
@@ -103,39 +405,39 @@
     flex-direction: column;
     align-items: flex-end;
     min-width: 150px;
+    flex-shrink: 0;
   }
   .meta .number{ font-weight:700; font-size:16px }
   .meta small{ display:block; color:var(--muted); font-size:12px }
 
-  /* BOTÕES DE AÇÃO FIXOS NO TOPO */
   .fixed-actions {
       position: fixed;
       top: 15px;
-      right: 24px;
-      z-index: 1010; 
+      right: 15px;
+      z-index: 1010;
       display: flex;
-      gap: 10px;
+      gap: 8px;
   }
   .fixed-actions button, .fixed-actions label {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       padding: 0;
-      font-size: 18px;
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 10px rgba(12,20,50,0.15); 
+      box-shadow: 0 4px 10px rgba(12,20,50,0.15);
+      flex-shrink: 0;
   }
 
-  /* Estilos específicos dos novos botões */
   #btn-select-logo {
       background: var(--accent);
       color: #fff;
-      font-size: 20px;
+      font-size: 18px;
   }
   #btn-config-oficina {
       background: var(--muted);
@@ -144,7 +446,7 @@
   
   .fixed-actions button:hover, .fixed-actions label:hover {
       box-shadow: 0 6px 12px rgba(12,20,50,0.25);
-      transform: scale(1.05); 
+      transform: scale(1.05);
   }
 
   .card{
@@ -154,48 +456,46 @@
     padding:16px;
     margin-bottom:16px;
     box-shadow: 0 1px 4px rgba(12,20,50,0.04);
+    overflow: hidden;
   }
 
   .row{ display:flex; gap:12px; flex-wrap:wrap; }
-  .col{ flex:1; min-width:220px; } /* Padrão, será sobrescrito abaixo */
+  .col{ flex:1; min-width:220px; }
 
-  /* OTIMIZAÇÃO DE LARGURA PARA OS INPUTS DE CLIENTE/VEÍCULO */
   .info-group .row .col {
-      /* Padrões mais compactos para telas grandes */
-      flex: 1; /* Permite crescimento, mas tenta manter a linha */
-      min-width: 150px; 
+      flex: 1;
+      min-width: 150px;
   }
-  /* Ajustes específicos para campos muito pequenos */
   .info-group .row .col.col-placa, 
   .info-group .row .col.col-ano, 
   .info-group .row .col.col-cor, 
   .info-group .row .col.col-km {
-      min-width: 90px; /* Campos bem compactos */
-      flex: 0.3; /* Menor flex para preferir o tamanho mínimo */
+      min-width: 90px;
+      flex: 0.3;
   }
   .info-group .row .col.col-marca {
-      min-width: 110px; 
-      flex: 0.5; 
+      min-width: 110px;
+      flex: 0.5;
   }
   .info-group .row .col.col-modelo {
-      min-width: 130px; 
-      flex: 0.7; 
+      min-width: 130px;
+      flex: 0.7;
   }
   .info-group .row .col.col-tel, 
   .info-group .row .col.col-doc {
       min-width: 130px;
       flex: 0.7;
   }
-  /* Fim OTIMIZAÇÃO DE LARGURA */
 
-  /* Estilo para o botão de consulta de placa */
   .placa-consulta-container {
     display: flex;
     gap: 8px;
     align-items: flex-end;
+    flex-wrap: wrap;
   }
   .placa-consulta-container .col {
     flex: 1;
+    min-width: 120px;
   }
   .placa-consulta-container button {
     height: 42px;
@@ -204,9 +504,9 @@
     white-space: nowrap;
     font-size: 14px;
     font-weight: 600;
+    flex-shrink: 0;
   }
 
-  /* Destaque vermelho para placa */
   .placa-destaque {
     border: 2px solid #dc2626 !important;
     background-color: #fef2f2 !important;
@@ -226,7 +526,7 @@
     background: #b91c1c !important;
     border-color: #b91c1c !important;
   }
-
+  
   label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
   input[type="text"], input[type="number"], input[type="date"], textarea, select{
     width:100%;
@@ -235,12 +535,13 @@
     border:1px solid var(--border);
     font-size:14px;
     background:#fff;
+    max-width: 100%;
+    box-sizing: border-box;
   }
   textarea{ min-height:64px; resize:vertical; }
 
   .small{ font-size:12px; color:var(--muted) }
 
-  /* items table */
   table{ width:100%; border-collapse:collapse; margin-top:8px; font-size:14px;}
   table thead th{
     text-align:left;
@@ -256,21 +557,27 @@
   .text-right{ text-align:right }
   .muted{ color:var(--muted); font-size:13px }
   
-  /* DESTAQUE AZUL PARA VALORES NA TABELA */
   .valor-destaque {
       font-weight: 600;
-      color: var(--accent); /* Destaque azul */
+      color: var(--accent);
   }
 
-  .actions{ display:flex; gap:8px; align-items:center; }
+  .actions{ display:flex; gap:8px; align-items:center; flex-wrap: wrap; }
 
   button{
-    padding:8px 12px;
+    padding:10px 14px;
     border-radius:8px;
     border:0;
     cursor:pointer;
     font-weight:600;
     transition: all 0.2s ease;
+    font-size: 14px;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .btn-primary{ background:var(--accent); color:#fff; }
   .btn-primary:hover { opacity: 0.9; }
@@ -280,34 +587,104 @@
   .btn-danger:hover { opacity: 0.9; }
   .btn-success{ background:var(--success); color:#fff; }
 
-  /* ----------------- AJUSTE DOS TOTAIS (HORIZONTAL E ALINHAMENTO) ----------------- */
   .totals-wrapper {
     display: flex;
-    justify-content: flex-end; 
+    justify-content: flex-end;
     margin-top: 12px;
   }
   .totals{
-    display: flex; 
-    gap: 12px; 
+    display: flex;
+    gap: 12px;
     align-items: center;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
   }
   .totals .box{
     background:#f8fafc;
     border:1px solid var(--border);
     padding:10px 14px;
     border-radius:8px;
-    min-width: 150px; 
-    flex: 1; 
-    text-align:right; /* Alinha o conteúdo à direita */
-    margin-bottom: 0; 
+    min-width: 150px;
+    flex: 1;
+    text-align:right;
+    margin-bottom: 0;
   }
   .totals .box .label{ color:var(--muted); font-size:13px }
-  /* DESTAQUE AZUL PARA VALORES TOTAIS */
   .totals .box .value{ font-weight:700; font-size:18px; color:var(--accent); }
-  /* ----------------- FIM AJUSTE DOS TOTAIS ----------------- */
 
-  /* ----------------- ASSINATURAS DIGITAIS ----------------- */
+  #vehicle-info-content {
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 10px;
+      overflow: hidden;
+  }
+
+  #vehicle-logo-display {
+      text-align: center;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border);
+      max-width: 100%;
+      overflow: hidden;
+  }
+  #vehicle-logo-display img {
+      max-height: 50px;
+      max-width: 120px;
+      height: auto;
+      width: auto;
+      object-fit: contain;
+  }
+
+  .vehicle-detail-grid-display {
+      display: grid;
+      grid-template-columns: 1fr;
+      width: 100%;
+      overflow: hidden;
+  }
+
+  @media (min-width: 600px) {
+      .vehicle-detail-grid-display {
+          grid-template-columns: repeat(2, 1fr);
+      }
+  }
+
+  .vehicle-detail-item-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+      width: 100%;
+      box-sizing: border-box;
+  }
+  .vehicle-detail-item-display:nth-child(even) {
+      background: #f8fafc;
+  }
+  .vehicle-detail-item-display:last-child {
+      border-bottom: none;
+  }
+
+  .vehicle-detail-label-display {
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-right: 10px;
+      flex-shrink: 0;
+      width: 45%;
+      text-align: left;
+  }
+  .vehicle-detail-value-display {
+      font-weight: 500;
+      color: #111827;
+      text-align: right;
+      word-break: break-word;
+      width: 55%;
+  }
+
   .signature-section {
     margin-top: 16px;
     border-top: 1px solid var(--border);
@@ -352,9 +729,7 @@
     font-size: 12px;
     padding: 6px 10px;
   }
-  /* ----------------- FIM ASSINATURAS DIGITAIS ----------------- */
 
-  /* ----------------- CORREÇÃO DOS MODAIS ----------------- */
   .modal-overlay {
       position: fixed;
       top: 0;
@@ -362,11 +737,11 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.6);
-      display: none; 
-      align-items: center; 
-      justify-content: center; 
+      display: none;
+      align-items: center;
+      justify-content: center;
       z-index: 1000;
-      overflow-y: auto; 
+      overflow-y: auto;
   }
   .modal-content {
       background: var(--card);
@@ -376,9 +751,8 @@
       max-width: 500px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       animation: fadeIn 0.3s ease-out;
-      margin: 20px 0; 
+      margin: 20px 0;
   }
-  /* ----------------- FIM CORREÇÃO DOS MODAIS ----------------- */
   
   .modal-header {
       display: flex;
@@ -400,7 +774,6 @@
       color: var(--danger);
   }
 
-  /* Estilos para o Modal de Cópia */
   #copy-modal .modal-content {
     max-width: 450px;
   }
@@ -436,7 +809,6 @@
       to { opacity: 1; transform: scale(1); }
   }
 
-  /* Footer para o botão de zerar OS */
   footer { 
       margin-top:18px; 
       display:flex; 
@@ -455,250 +827,50 @@
       color: #fff;
   }
 
-  /* ---------------------- INÍCIO OTIMIZAÇÃO DE IMPRESSÃO ---------------------- */
+  /* CORREÇÃO: Estilos para ocultar campos vazios na impressão */
   @media print{
-    html, body {
-        height: auto;
-        max-height: none;
-        overflow: visible;
-        padding-top: 0 !important;
-        font-size: 12px; 
-    }
-    body{
-        padding:0;
-        background:#fff;
-        margin: 0;
-        width: 100%;
-    }
-    .container {
-        max-width: 100%;
-        padding: 0 15px; 
-        margin: 0;
-    }
-
-    .card{
-        box-shadow:none;
-        border:1px solid #ddd;
-        margin:10px 0;
-        border-radius:0;
-        padding: 12px; 
-        page-break-inside: avoid;
-    }
-
-    .row { 
-        gap: 8px; 
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-    /* Regra de compactação específica para a impressão */
-    .info-group .row .col {
-        min-width: 100px !important; 
-        flex: 1 1 100px !important; 
-    }
-    /* Campos que precisam de mais espaço no print */
-    .info-group .row .col.col-nome { min-width: 200px !important; flex: 2 !important; }
-    .info-group .row .col.col-doc,
-    .info-group .row .col.col-tel { min-width: 140px !important; flex: 1.5 !important; }
-    .info-group .row .col.col-marca { min-width: 120px !important; flex: 1.2 !important; }
-    .info-group .row .col.col-modelo { min-width: 150px !important; flex: 1.5 !important; }
-    .info-group .row .col.col-placa,
-    .info-group .row .col.col-ano,
-    .info-group .row .col.col-cor,
-    .info-group .row .col.col-km { min-width: 90px !important; flex: 1 !important; }
+    .no-print, .chat-container, .chat-toggle { display: none !important; }
     
-    label, .small, .muted { 
-        font-size: 10px !important; 
-        margin-bottom: 3px; 
-    }
-    input[type="text"], input[type="number"], input[type="date"], textarea, select{
-        padding: 4px 6px; 
-        font-size: 11px;
-        border: 1px solid #ccc;
-    }
-    textarea { min-height: 40px; } 
-    
-    table thead th, table tbody td { padding: 4px 8px; } 
-    h3 { font-size: 14px; margin: 0 0 5px 0 !important; } 
-
-    .no-print, .modal-overlay, .fixed-actions, .signature-actions { display:none !important }
-    header.top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-
-    .brand.has-logo {
-      padding: 8px 16px 8px 70px; 
-      min-height: 50px;
-    }
-    .brand.has-logo .logo-container {
-        width: 40px; 
-        height: 40px; 
-    }
-    .brand h1{ font-size:16px; }
-    .brand small{ font-size:10px }
-
-    /* Ajustes dos totais no print */
-    .totals-wrapper {
-        justify-content: flex-end; 
-        margin-top: 8px;
-    }
-    .totals{
-        display: flex;
-        gap: 10px; 
-    }
-    .totals .box {
-        min-width: 130px; 
-        flex: 1; 
-        padding: 6px 10px;
-        background: #fff; 
-        border: 1px solid #ddd;
-        margin-bottom: 0; 
-        text-align: right; 
-    }
-    .totals .box .label { font-size: 11px; }
-    .totals .box .value { 
-        font-size: 14px; 
+    /* Oculta campos vazios */
+    input.empty-field, textarea.empty-field, 
+    .empty-section, .empty-card,
+    .signature-box:has(canvas:not([data-has-signature])) {
+      display: none !important;
     }
     
-    footer { margin-top: 10px; }
-    
-    /* Assinaturas no print */
-    .signature-canvas {
-        border: 1px solid #ccc;
-        height: 80px;
+    /* Oculta linhas da tabela vazias */
+    table tbody tr:has(td:empty) {
+      display: none !important;
     }
     
-    /* Estilo para página de informações do veículo */
-    .vehicle-info-page {
-        page-break-before: always;
-        border: 2px solid #dc2626;
-        padding: 15px;
-        margin: 10px 0;
-        background: #fef2f2;
-    }
-    /* Oculta o conteúdo normal da div #vehicle-info-content no print */
-    #vehicle-info-container #vehicle-info-content {
-        display: none; 
-    }
-    /* Oculta a estrutura de impressão na tela */
-    #vehicle-info-container .vehicle-info-page {
-        display: none; 
-    }
-    /* Mostra a estrutura de impressão no print */
-    @media print {
-        #vehicle-info-container .vehicle-info-page {
-            display: block !important; 
-        }
-    }
-    
-    .vehicle-info-page h2 {
-        color: #dc2626;
-        text-align: center;
-        border-bottom: 2px solid #dc2626;
-        padding-bottom: 8px;
-        margin-bottom: 15px;
-        font-size: 18px;
-    }
-    .vehicle-detail-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-    .vehicle-detail-item {
-        border-bottom: 1px dashed #ddd;
-        padding: 5px 0;
-        display: flex;
-        justify-content: space-between;
-    }
-    .vehicle-detail-label {
-        font-weight: bold;
-        color: #333;
-        flex: 1;
-    }
-    .vehicle-detail-value {
-        color: #666;
-        flex: 1;
-        text-align: right;
-    }
-    .vehicle-section {
-        margin-bottom: 20px;
-    }
-    .vehicle-section h3 {
-        background: #dc2626;
-        color: white;
-        padding: 8px 12px;
-        margin: 0 0 10px 0;
-        font-size: 14px;
-        border-radius: 4px;
-    }
-    
-    /* Ocultar campos vazios no print */
-    .empty-field {
-        display: none !important;
-    }
-    
-    /* Estilo para a logo da marca no print */
-    .vehicle-logo {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    .vehicle-logo img {
-        max-height: 60px;
-        max-width: 120px;
-    }
-    
-    /* Destaque para placa no print */
-    .placa-destaque-print {
-        border: 2px solid #dc2626 !important;
-        background-color: #fef2f2 !important;
-        font-weight: bold !important;
-        color: #dc2626 !important;
-    }
-  }
-  /* ---------------------- FIM OTIMIZAÇÃO DE IMPRESSÃO ---------------------- */
-
-  /* responsive */
-  @media (max-width:760px){
-    .meta{text-align:left; margin-left:0; align-items: flex-start; }
-    .fixed-actions {
-        top: 15px;
-        right: 15px; 
-    }
-    footer {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    footer > div {
-        width: 100%;
-        text-align: center;
-    }
-    /* Em telas pequenas, permite quebrar o row para melhor usabilidade */
-    .info-group .row .col {
-        min-width: 48% !important; 
-        flex: 1 1 48% !important; 
-    }
-    
-    .signature-container {
-        flex-direction: column;
-    }
-    .signature-box {
-        min-width: 100%;
-    }
-    
-    .vehicle-detail-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .placa-consulta-container {
-        flex-direction: column;
-    }
-    .placa-consulta-container button {
-        width: 100%;
-        margin-top: 5px;
+    /* Oculta seções de assinatura sem assinatura */
+    .signature-box:not(:has(canvas[data-has-signature])) {
+      display: none !important;
     }
   }
 </style>
 </head>
 <body>
   
+  <!-- Botão para abrir o chat -->
+  <button id="open-chat" class="chat-toggle no-print">💬</button>
+
+  <!-- Container do Chat em tela cheia -->
+  <div id="chat-container" class="chat-container">
+    <div class="chat-header">
+      <h4>🤖 Assistente de Orçamento</h4>
+      <button class="chat-close" id="close-chat" title="Fechar chat">×</button>
+    </div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="chat-input-container">
+      <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua resposta ou use o microfone..." autocomplete="off">
+      <button id="chat-voice" class="chat-voice" title="Falar">🎤</button>
+      <button id="send-chat" class="chat-send">➤</button>
+    </div>
+    <!-- BOTÃO ALTERNATIVO PARA FECHAR NO MOBILE -->
+    <button class="chat-mobile-close" id="close-chat-mobile">Fechar Assistente</button>
+  </div>
+
   <div class="fixed-actions no-print">
       <button id="btn-config-oficina" title="Configurações da Oficina">⚙️</button>
       
@@ -707,9 +879,9 @@
   </div>
 
   <div class="container">
+    <!-- Conteúdo original da aplicação 1 -->
     <header class="top">
       <div class="brand" id="brand-container">
-        
         <div class="logo-container">
             <img id="logo-img" src="" alt="Logo da Oficina">
         </div>
@@ -734,11 +906,11 @@
         </div>
         <div class="col col-doc">
           <label>CPF / CNPJ</label>
-          <input id="cliente-doc" type="text" placeholder="000.000.000-00">
+          <input id="cliente-doc" type="text" placeholder="000.000.000-00" inputmode="numeric">
         </div>
         <div class="col col-tel">
           <label>Telefone / WhatsApp</label>
-          <input id="cliente-tel" type="text" placeholder="(00) 9 0000-0000">
+          <input id="cliente-tel" type="text" placeholder="(00) 9 0000-0000" inputmode="tel">
         </div>
         
         <div class="placa-consulta-container">
@@ -754,32 +926,32 @@
       <div class="row">
         <div class="col col-marca">
           <label>Marca</label>
-          <input id="veic-marca" type="text" placeholder="Ex: VW">
+          <input id="veic-marca" type="text" placeholder="Ex: FIAT">
         </div>
         <div class="col col-modelo">
           <label>Modelo</label>
-          <input id="veic-modelo" type="text" placeholder="Ex: CROSSFOX">
+          <input id="veic-modelo" type="text" placeholder="Ex: IDEA ADVENTURE 1.8">
         </div>
         <div class="col col-ano">
           <label>Ano Fabricação</label>
-          <input id="veic-ano-fabricacao" type="text" placeholder="2007">
+          <input id="veic-ano-fabricacao" type="text" placeholder="2011" inputmode="numeric" pattern="[0-9]*">
         </div>
         <div class="col">
           <label>Ano Modelo</label>
-          <input id="veic-ano-modelo" type="text" placeholder="2007">
+          <input id="veic-ano-modelo" type="text" placeholder="2012" inputmode="numeric" pattern="[0-9]*">
         </div>
       </div>
       
       <div class="row" style="margin-top: 12px;">
         <div class="col col-cor">
           <label>Cor</label>
-          <input id="veic-cor" type="text" placeholder="Ex: Prata">
+          <input id="veic-cor" type="text" placeholder="Ex: CINZA">
         </div>
         <div class="col col-km">
           <label>Km</label>
-          <input id="veic-km" type="text" placeholder="123456" maxlength="6" inputmode="numeric" pattern="[0-9]*">
+          <input id="veic-km" type="text" placeholder="123456" maxlength="6" inputmode="decimal" pattern="[0-9.,]*">
         </div>
-        <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div> 
+        <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div>
         <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div>
       </div>
 
@@ -790,13 +962,14 @@
     </div>
 
     <div id="vehicle-info-container" class="card">
-      <h3 style="margin:0 0 8px 0">Informações Completas do Veículo</h3>
+      <h3 style="margin:0 0 8px 0">Informações Completas do Veículo (API)</h3>
       <div id="vehicle-info-content">
-        <p class="muted">As informações completas do veículo aparecerão aqui após a consulta da placa.</p>
+        <p class="muted" style="padding: 16px;">As informações completas do veículo aparecerão aqui após a consulta da placa.</p>
       </div>
-      <div id="vehicle-info-page-print" class="vehicle-info-page">
-          </div>
+      <div id="vehicle-info-page-print" class="vehicle-info-page"></div>
     </div>
+
+    <div id="vehicle-info-pdf-container" style="display: none;"></div>
 
     <div class="card">
         <h3 style="margin:0 0 8px 0">Responsáveis</h3>
@@ -831,8 +1004,7 @@
             <th style="width:18%" class="no-print">Ações</th>
           </tr>
         </thead>
-        <tbody id="itens-body">
-          </tbody>
+        <tbody id="itens-body"></tbody>
       </table>
 
       <div class="totals-wrapper">
@@ -841,12 +1013,10 @@
             <div class="label">Total peças</div>
             <div class="value" id="total-pecas">R$ 0,00</div>
             </div>
-
             <div class="box">
             <div class="label">Total mão de obra</div>
             <div class="value" id="total-mdo">R$ 0,00</div>
             </div>
-
             <div class="box">
             <div class="label">TOTAL GERAL</div>
             <div class="value" id="total-geral">R$ 0,00</div>
@@ -855,13 +1025,12 @@
       </div>
       <div style="display:flex; justify-content:space-between; gap:12px; margin-top:12px; align-items:center; flex-wrap:wrap;">
         <div class="muted">Observação: valores podem variar caso sejam identificados novos serviços após abertura.</div>
-
         <div class="no-print actions">
-          <button class="btn-ghost" id="btn-salvar">Salvar (local)</button>
-          <button class="btn-ghost" id="btn-limpar">Limpar</button>
+          <button class="btn-danger" id="btn-limpar">Limpar Tudo</button>
           <button class="btn-primary" id="btn-imprimir">Gerar PDF / Imprimir</button>
-          <button class="btn-success" id="btn-whatsapp">📱 Enviar WhatsApp</button>
-          <button class="btn-success" id="btn-copy-all">📋 Copiar Tudo</button>
+          <button class="btn-success" id="btn-whatsapp">Enviar WhatsApp</button>
+          <button class="btn-success" id="btn-copy-all">Copiar Tudo</button>
+          <button class="btn-ghost" id="btn-reset-os">Zerar Contador OS</button>
         </div>
       </div>
     </div>
@@ -874,7 +1043,7 @@
         </div>
         <div class="col">
           <label>Validade do orçamento</label>
-          <input type="number" id="validade" min="1" value="7"> <span class="small">dias</span>
+          <input type="number" id="validade" min="1" value="7" inputmode="numeric"> <span class="small">dias</span>
         </div>
         <div class="col">
           <label>Garantia serviço</label>
@@ -938,12 +1107,12 @@
     <footer>
       <div class="small muted">Orçamento gerado pelo sistema • Recomenda-se revisar valores antes de aprovar.</div>
       <div class="actions no-print">
-        <button class="btn-ghost" id="btn-export-json">Exportar JSON</button>
-        <button class="btn-ghost" id="btn-reset-os">Zerar Contador de OS</button>
+        <button class="btn-ghost" id="btn-export-json">Baixar Dados (JSON)</button>
       </div>
     </footer>
   </div>
 
+  <!-- MODAIS -->
   <div class="modal-overlay" id="item-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -965,11 +1134,11 @@
         <div class="row">
             <div class="col" style="min-width: 100px; flex: 1;">
                 <label>Quantidade</label>
-                <input id="item-qtd" type="text" inputmode="numeric" pattern="[0-9]*" value="1">
+                <input id="item-qtd" type="text" inputmode="decimal" pattern="[0-9.,]*" value="1">
             </div>
             <div class="col" style="min-width: 150px; flex: 2;">
                 <label>Valor Unitário (R$)</label>
-                <input id="item-valor" type="text" inputmode="decimal" placeholder="R$ 0,00">
+                <input id="item-valor" type="text" inputmode="decimal" placeholder="R$ 0,00" pattern="[0-9.,]*">
             </div>
         </div>
         <div>
@@ -984,59 +1153,682 @@
     </div>
   </div>
 
+  <!-- Modal de Configurações -->
   <div class="modal-overlay" id="config-modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="config-modal-title">Configurações da Oficina</h3>
-            <button class="modal-close" id="btn-close-modal-config">×</button>
+      <div class="modal-header">
+        <h3>Configurações da Oficina</h3>
+        <button class="modal-close" id="btn-close-modal-config">×</button>
+      </div>
+      <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
+        <div>
+          <label>Nome da Oficina</label>
+          <input id="config-nome" type="text" placeholder="Nome da sua oficina">
         </div>
-        <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
-            <div>
-                <label>Nome da Oficina</label>
-                <input id="config-nome" type="text" placeholder="Nome Fantasia">
-            </div>
-            <div>
-                <label>Telefone / WhatsApp</label>
-                <input id="config-telefone" type="text" placeholder="(00) 0 0000-0000">
-            </div>
-            <div>
-                <label>Endereço Completo</label>
-                <textarea id="config-endereco" placeholder="Rua, Número, Bairro, Cidade - Estado"></textarea>
-            </div>
+        <div>
+          <label>Telefone</label>
+          <input id="config-telefone" type="text" placeholder="(00) 9 0000-0000" inputmode="tel">
         </div>
-        <div style="margin-top:20px; text-align:right;">
-            <button class="btn-ghost" id="btn-cancel-modal-config">Cancelar</button>
-            <button class="btn-primary" id="btn-save-config">Salvar Configurações</button>
+        <div>
+          <label>Endereço</label>
+          <textarea id="config-endereco" placeholder="Endereço completo da oficina"></textarea>
         </div>
+      </div>
+      <div style="margin-top:20px; text-align:right;">
+        <button class="btn-ghost" id="btn-cancel-modal-config">Cancelar</button>
+        <button class="btn-primary" id="btn-save-config">Salvar</button>
+      </div>
     </div>
   </div>
-  
+
+  <!-- Modal de Copiar Título -->
   <div class="modal-overlay" id="copy-modal">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h3>Preparar Geração de PDF</h3>
-              <button class="modal-close" id="btn-close-copy-modal">×</button>
-          </div>
-          <div class="modal-body">
-              <p>O nome sugerido para o arquivo PDF é:</p>
-              <div id="suggested-title" title="Clique no botão para copiar."></div>
-              <p class="small muted">Atenção: Copie o título acima e cole-o na janela de salvamento do seu navegador para garantir o nome correto.</p>
-          </div>
-          <div class="modal-footer">
-              <button class="btn-ghost" id="btn-cancel-pdf">Cancelar</button>
-              <button class="btn-primary" id="copy-btn">Copiar Título</button>
-              <button class="btn-primary" id="generate-pdf-btn">Gerar PDF</button>
-          </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Copiar Título do Orçamento</h3>
+        <button class="modal-close" id="btn-close-copy-modal">×</button>
       </div>
+      <div class="modal-body">
+        <p>Copie o título abaixo para usar no PDF:</p>
+        <div id="suggested-title"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-ghost" id="btn-cancel-pdf">Cancelar</button>
+        <button class="btn-primary" id="copy-btn">Copiar Título</button>
+        <button class="btn-success" id="generate-pdf-btn">Gerar PDF</button>
+      </div>
+    </div>
   </div>
 
 <script>
-  // Utilitários
+  // =============================================
+  // SISTEMA DE CHATBOT IA AVANÇADO CORRIGIDO
+  // =============================================
+
+  class OrcamentoChatbot {
+    constructor() {
+      this.currentStep = 0;
+      this.conversationHistory = [];
+      this.userData = {};
+      this.isListening = false;
+      this.recognition = null;
+      this.currentItem = null;
+      
+      // CORREÇÃO: Adicionadas perguntas sobre CPF e KM
+      this.steps = [
+        {
+          question: "🚗 **Vamos criar um orçamento!** Qual a **placa do veículo**?",
+          field: 'placa',
+          type: 'placa',
+          skipText: "Pular placa",
+          voiceHint: "Diga a placa do veículo, por exemplo: ABC um A dois três"
+        },
+        {
+          question: "👤 Qual o **nome do cliente**?",
+          field: 'clienteNome',
+          type: 'text',
+          skipText: "Pular nome",
+          voiceHint: "Diga o nome completo do cliente"
+        },
+        {
+          question: "📄 Qual o **CPF ou CNPJ** do cliente?",
+          field: 'clienteDoc',
+          type: 'documento',
+          skipText: "Pular documento",
+          voiceHint: "Diga o CPF ou CNPJ do cliente"
+        },
+        {
+          question: "📞 Qual o **telefone** do cliente?",
+          field: 'clienteTelefone', 
+          type: 'telefone',
+          skipText: "Pular telefone",
+          voiceHint: "Diga o telefone com DDD, por exemplo: onze nove nove nove oito sete seis cinco quatro três"
+        },
+        {
+          question: "📊 Qual a **quilometragem atual** do veículo?",
+          field: 'veiculoKm',
+          type: 'km',
+          skipText: "Pular quilometragem",
+          voiceHint: "Diga a quilometragem atual do veículo"
+        },
+        {
+          question: "🔧 Qual o **diagnóstico** ou problema relatado?",
+          field: 'diagnostico',
+          type: 'textarea',
+          skipText: "Pular diagnóstico",
+          voiceHint: "Descreva o problema do veículo"
+        },
+        {
+          question: "🛠️ Vamos adicionar **peças e serviços**. Digite o **nome do primeiro item** ou diga 'próximo' para pular:",
+          field: 'itens',
+          type: 'itens',
+          skipText: "Pular itens",
+          voiceHint: "Diga o nome do serviço ou peça, por exemplo: troca de óleo do motor"
+        },
+        {
+          question: "⏰ Qual o **prazo estimado** para execução?",
+          field: 'prazo',
+          type: 'text',
+          skipText: "Pular prazo",
+          voiceHint: "Diga o prazo, por exemplo: três dias úteis"
+        },
+        {
+          question: "🛡️ Qual a **garantia** oferecida?",
+          field: 'garantia', 
+          type: 'text',
+          skipText: "Pular garantia",
+          voiceHint: "Diga a garantia, por exemplo: noventa dias para serviços"
+        },
+        {
+          question: "💳 Quais as **condições de pagamento**?",
+          field: 'condicoes',
+          type: 'text',
+          skipText: "Pular condições",
+          voiceHint: "Diga as condições de pagamento"
+        },
+        {
+          question: "✅ **Orçamento completo!** O que deseja fazer?",
+          field: 'finalizacao',
+          type: 'acoes',
+          skipText: "Continuar editando"
+        }
+      ];
+
+      this.initVoiceRecognition();
+    }
+
+    initVoiceRecognition() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = false;
+        this.recognition.interimResults = false;
+        this.recognition.lang = 'pt-BR';
+
+        this.recognition.onresult = (event) => {
+          const transcript = event.results[0][0].transcript;
+          this.processVoiceInput(transcript);
+        };
+
+        this.recognition.onerror = (event) => {
+          console.error('Erro no reconhecimento de voz:', event.error);
+          this.addBotMessage("❌ **Não consegui entender.** Tente digitar ou falar novamente.");
+          this.isListening = false;
+          this.updateVoiceButton();
+        };
+
+        this.recognition.onend = () => {
+          this.isListening = false;
+          this.updateVoiceButton();
+        };
+      }
+    }
+
+    processVoiceInput(transcript) {
+      this.addUserMessage(transcript);
+      
+      const currentStep = this.getCurrentQuestion();
+      
+      if (currentStep.type === 'itens' && this.currentItem) {
+        if (!this.currentItem.valor) {
+          this.processItemValor(transcript);
+        } else if (!this.currentItem.quantidade) {
+          this.processItemQuantidade(transcript);
+        }
+      } else if (transcript.toLowerCase().includes('próximo') || transcript.toLowerCase().includes('proximo')) {
+        this.skipStepAndContinue();
+      } else if (transcript.toLowerCase().includes('voltar')) {
+        this.goBack();
+      } else {
+        this.processAnswer(transcript);
+      }
+    }
+
+    startListening() {
+      if (this.recognition && !this.isListening) {
+        this.isListening = true;
+        this.updateVoiceButton();
+        this.recognition.start();
+        this.addBotMessage("🎤 **Ouvindo...** Fale agora!");
+      }
+    }
+
+    stopListening() {
+      if (this.recognition && this.isListening) {
+        this.recognition.stop();
+        this.isListening = false;
+        this.updateVoiceButton();
+      }
+    }
+
+    updateVoiceButton() {
+      const voiceBtn = document.getElementById('chat-voice');
+      if (voiceBtn) {
+        voiceBtn.textContent = this.isListening ? '⏹️' : '🎤';
+        voiceBtn.classList.toggle('listening', this.isListening);
+      }
+    }
+
+    getCurrentQuestion() {
+      return this.steps[this.currentStep];
+    }
+
+    processAnswer(answer) {
+      const currentStep = this.getCurrentQuestion();
+      this.conversationHistory.push({
+        step: currentStep.field,
+        question: currentStep.question,
+        answer: answer
+      });
+
+      switch(currentStep.type) {
+        case 'placa':
+          this.processPlaca(answer);
+          break;
+        case 'documento':
+          this.processDocumento(answer);
+          break;
+        case 'km':
+          this.processKm(answer);
+          break;
+        case 'itens':
+          this.processItem(answer);
+          break;
+        case 'acoes':
+          this.processAcao(answer);
+          break;
+        default:
+          this.updateField(currentStep.field, answer);
+      }
+
+      if (currentStep.type !== 'itens' && currentStep.field !== 'finalizacao') {
+        this.currentStep++;
+      }
+
+      return this.getCurrentQuestion();
+    }
+
+    processPlaca(placa) {
+      if (placa && placa.trim()) {
+        const placaConvertida = this.convertWordsToNumbers(placa);
+        const placaLimpa = placaConvertida.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+        
+        document.getElementById('veic-placa').value = this.formatPlaca(placaLimpa);
+        persist();
+        
+        this.addBotMessage(`🔍 **Consultando dados da placa ${placaLimpa}...**`);
+        
+        setTimeout(() => {
+          if (typeof consultarPlaca === 'function') {
+            consultarPlaca();
+          }
+          this.addBotMessage("✅ **Dados do veículo preenchidos automaticamente!**");
+        }, 1500);
+      }
+    }
+
+    processDocumento(documento) {
+      if (documento && documento.trim()) {
+        const docConvertido = this.convertWordsToNumbers(documento);
+        const docLimpo = docConvertido.replace(/[^0-9]/g, '');
+        
+        let docFormatado = docLimpo;
+        if (docLimpo.length <= 11) {
+          docFormatado = docLimpo.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        } else {
+          docFormatado = docLimpo.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+        }
+        
+        document.getElementById('cliente-doc').value = docFormatado;
+        persist();
+        this.addBotMessage("✅ **Documento registrado com sucesso!**");
+      }
+    }
+
+    processKm(km) {
+      if (km && km.trim()) {
+        const kmConvertido = this.convertWordsToNumbers(km);
+        const kmLimpo = kmConvertido.replace(/[^0-9]/g, '');
+        
+        document.getElementById('veic-km').value = kmLimpo;
+        persist();
+        this.addBotMessage("✅ **Quilometragem registrada com sucesso!**");
+      }
+    }
+
+    convertWordsToNumbers(text) {
+      const numberMap = {
+        'zero': '0', 'um': '1', 'dois': '2', 'três': '3', 'quatro': '4',
+        'cinco': '5', 'seis': '6', 'sete': '7', 'oito': '8', 'nove': '9'
+      };
+      
+      return text.replace(
+        new RegExp(Object.keys(numberMap).join('|'), 'gi'),
+        matched => numberMap[matched.toLowerCase()] || matched
+      );
+    }
+
+    processItem(descricao) {
+      if (descricao && descricao.trim() && !descricao.toLowerCase().includes('próximo') && !descricao.toLowerCase().includes('proximo')) {
+        this.currentItem = { descricao: descricao };
+        this.addBotMessage(`💵 Qual o **valor** para **${descricao}**?`);
+      } else {
+        this.skipStepAndContinue();
+      }
+    }
+
+    processItemValor(valor) {
+      if (this.currentItem) {
+        const valorNumerico = valor.replace(/[^\d,]/g, '').replace(',', '.');
+        this.currentItem.valor = parseFloat(valorNumerico) || 0;
+        
+        if (this.currentItem.valor > 0) {
+          this.addBotMessage(`📦 Qual a **quantidade** para **${this.currentItem.descricao}**?`);
+        } else {
+          this.addBotMessage("❌ **Valor inválido.** Digite o valor novamente:");
+        }
+      }
+    }
+
+    processItemQuantidade(qtd) {
+      if (this.currentItem) {
+        const qtdNumerica = qtd.replace(/\D/g, '');
+        this.currentItem.quantidade = parseInt(qtdNumerica) || 1;
+        this.finalizarItem();
+      }
+    }
+
+    finalizarItem() {
+      if (this.currentItem && this.currentItem.descricao && this.currentItem.valor && this.currentItem.quantidade) {
+        this.adicionarItemTabela(this.currentItem.descricao, this.currentItem.quantidade, this.currentItem.valor);
+        this.addBotMessage(`✅ **Item adicionado!**\n\n${this.currentItem.quantidade}x ${this.currentItem.descricao} - R$ ${this.currentItem.valor.toFixed(2)}`);
+        
+        this.addBotMessage("📝 Quer adicionar **mais um item**? Digite o nome ou **'próximo'** para continuar.");
+        this.currentItem = null;
+      }
+    }
+
+    adicionarItemTabela(descricao, quantidade, valor) {
+      const novoItem = {
+        descricao: descricao,
+        tipo: descricao.toLowerCase().includes('mão de obra') || descricao.toLowerCase().includes('serviço') ? 'MDO' : 'PECA',
+        qtd: parseFloat(quantidade),
+        valor: parseFloat(valor),
+        obs: 'Adicionado via assistente'
+      };
+
+      orcamento.itens.push(novoItem);
+      persist();
+      renderAll();
+    }
+
+    processAcao(resposta) {
+      resposta = resposta.toLowerCase();
+      if (resposta.includes('pdf') || resposta.includes('imprimir') || resposta.includes('gerar')) {
+        this.addBotMessage("📄 **Gerando PDF...**");
+        this.gerarPDFDiretamente();
+      } else if (resposta.includes('whatsapp') || resposta.includes('zap')) {
+        this.addBotMessage("💬 **Preparando para enviar no WhatsApp...**");
+        setTimeout(() => btnWhatsapp.click(), 1000);
+      } else if (resposta.includes('copiar') || resposta.includes('texto')) {
+        this.addBotMessage("📋 **Texto copiado para a área de transferência!**");
+        setTimeout(() => btnCopyAll.click(), 500);
+      } else if (resposta.includes('assinar') || resposta.includes('assinatura')) {
+        this.addBotMessage("🖊️ **Encaminhando para assinaturas...**");
+        setTimeout(() => {
+          const signatureSection = document.querySelector('.signature-section');
+          if (signatureSection) {
+            signatureSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        }, 500);
+      } else if (resposta.includes('voltar') || resposta.includes('ajustar')) {
+        this.addBotMessage("🔙 **Voltando para edição...** Qual campo deseja ajustar?");
+        this.currentStep = 0;
+        setTimeout(() => this.askCurrentQuestion(), 1000);
+      } else if (resposta.includes('adicionar') || resposta.includes('mais') || resposta.includes('item')) {
+        this.addBotMessage("🛠️ **Vamos adicionar mais um item!** Digite o nome do próximo item:");
+        this.currentStep = 6; // Volta para o passo de itens
+      } else {
+        this.addBotMessage("❓ **Comando não reconhecido.** Escolha uma das opções abaixo:");
+        this.showFinalActions();
+      }
+    }
+
+    gerarPDFDiretamente() {
+      persist();
+      setTimeout(() => {
+        btnImprimir.click();
+        this.addBotMessage("✅ **PDF gerado com sucesso!** Verifique a janela de impressão do seu navegador.");
+      }, 1000);
+    }
+
+    updateField(field, value) {
+      if (value && value.trim()) {
+        this.userData[field] = value;
+        
+        const fieldMap = {
+          'clienteNome': 'cliente-nome',
+          'clienteTelefone': 'cliente-tel',
+          'diagnostico': 'diagnostico',
+          'prazo': 'prazo',
+          'garantia': 'garantia',
+          'condicoes': 'condicoes'
+        };
+
+        if (fieldMap[field]) {
+          document.getElementById(fieldMap[field]).value = value;
+          persist();
+        }
+      }
+    }
+
+    formatPlaca(placa) {
+      if (placa.length > 3) {
+        return placa.replace(/^(.{3})(.{1})(.{3})$/, '$1-$2$3');
+      }
+      return placa;
+    }
+
+    skipStep() {
+      this.currentStep++;
+      return this.getCurrentQuestion();
+    }
+
+    previousStep() {
+      if (this.currentStep > 0) {
+        this.currentStep--;
+      }
+      return this.getCurrentQuestion();
+    }
+
+    reset() {
+      this.currentStep = 0;
+      this.conversationHistory = [];
+      this.userData = {};
+      this.currentItem = null;
+    }
+
+    addBotMessage(message) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message bot';
+      messageDiv.innerHTML = this.formatMessage(message);
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    addUserMessage(message) {
+      const chatMessages = document.getElementById('chat-messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message user';
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    formatMessage(text) {
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                 .replace(/\n/g, '<br>');
+    }
+
+    showActions() {
+      const currentStep = this.getCurrentQuestion();
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'chat-actions';
+      
+      if (currentStep.skipText) {
+        const skipBtn = document.createElement('button');
+        skipBtn.className = 'chat-btn';
+        skipBtn.textContent = currentStep.skipText;
+        skipBtn.onclick = () => this.skipStepAndContinue();
+        actionsDiv.appendChild(skipBtn);
+      }
+
+      if (this.currentStep > 0) {
+        const backBtn = document.createElement('button');
+        backBtn.className = 'chat-btn';
+        backBtn.textContent = '⬅️ Voltar';
+        backBtn.onclick = () => this.goBack();
+        actionsDiv.appendChild(backBtn);
+      }
+
+      if (currentStep.voiceHint && this.recognition) {
+        const voiceHelpBtn = document.createElement('button');
+        voiceHelpBtn.className = 'chat-btn primary';
+        voiceHelpBtn.textContent = '🎤 Dica de Voz';
+        voiceHelpBtn.onclick = () => {
+          this.addBotMessage(`💡 **Dica de voz:** ${currentStep.voiceHint}`);
+        };
+        actionsDiv.appendChild(voiceHelpBtn);
+      }
+
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.appendChild(actionsDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    showFinalActions() {
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'chat-actions';
+      
+      const actions = [
+        { text: '📄 Gerar PDF', class: 'success', action: () => this.gerarPDFDiretamente() },
+        { text: '💬 WhatsApp', class: 'primary', action: () => setTimeout(() => btnWhatsapp.click(), 500) },
+        { text: '📋 Copiar Texto', class: 'primary', action: () => setTimeout(() => btnCopyAll.click(), 500) },
+        { text: '🛠️ Adicionar Item', class: 'primary', action: () => { this.currentStep = 6; this.askCurrentQuestion(); } },
+        { text: '🖊️ Assinar', class: 'primary', action: () => {
+          const signatureSection = document.querySelector('.signature-section');
+          if (signatureSection) signatureSection.scrollIntoView({ behavior: 'smooth' });
+        }},
+        { text: '✏️ Editar', class: '', action: () => { this.currentStep = 0; this.askCurrentQuestion(); } }
+      ];
+
+      actions.forEach(action => {
+        const btn = document.createElement('button');
+        btn.className = `chat-btn ${action.class}`;
+        btn.textContent = action.text;
+        btn.onclick = action.action;
+        actionsDiv.appendChild(btn);
+      });
+
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.appendChild(actionsDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    skipStepAndContinue() {
+      this.addUserMessage(this.getCurrentQuestion().skipText);
+      const nextStep = this.skipStep();
+      this.askCurrentQuestion();
+    }
+
+    goBack() {
+      this.addUserMessage('Voltar');
+      const prevStep = this.previousStep();
+      this.askCurrentQuestion();
+    }
+
+    askCurrentQuestion() {
+      const question = this.getCurrentQuestion();
+      
+      if (question.field === 'finalizacao') {
+        this.addBotMessage("✅ **Orçamento completo!** O que deseja fazer agora?");
+        this.showFinalActions();
+      } else {
+        this.addBotMessage(question.question);
+        this.showActions();
+      }
+    }
+
+    start() {
+      this.reset();
+      this.askCurrentQuestion();
+    }
+  }
+
+  // =============================================
+  // INICIALIZAÇÃO DO CHATBOT
+  // =============================================
+
+  const chatbot = new OrcamentoChatbot();
+
+  // Elementos do Chat
+  const openChatBtn = document.getElementById('open-chat');
+  const closeChatBtn = document.getElementById('close-chat');
+  const closeChatMobileBtn = document.getElementById('close-chat-mobile');
+  const chatContainer = document.getElementById('chat-container');
+  const chatInput = document.getElementById('chat-input');
+  const sendChatBtn = document.getElementById('send-chat');
+  const chatVoiceBtn = document.getElementById('chat-voice');
+
+  // Event Listeners do Chat - CORRIGIDOS
+  openChatBtn.addEventListener('click', () => {
+    chatContainer.classList.add('active');
+    chatInput.focus();
+    if (chatbot.currentStep === 0) {
+      setTimeout(() => chatbot.start(), 500);
+    }
+  });
+
+  // Função para fechar o chat
+  function closeChat() {
+    chatContainer.classList.remove('active');
+    chatbot.stopListening();
+  }
+
+  // Múltiplas formas de fechar o chat
+  closeChatBtn.addEventListener('click', closeChat);
+  closeChatMobileBtn.addEventListener('click', closeChat);
+
+  // Fechar ao clicar fora do conteúdo do chat (no overlay)
+  chatContainer.addEventListener('click', (e) => {
+    if (e.target === chatContainer) {
+      closeChat();
+    }
+  });
+
+  // Fechar com a tecla ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && chatContainer.classList.contains('active')) {
+      closeChat();
+    }
+  });
+
+  sendChatBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  chatVoiceBtn.addEventListener('click', () => {
+    if (chatbot.isListening) {
+      chatbot.stopListening();
+    } else {
+      chatbot.startListening();
+    }
+  });
+
+  function sendMessage() {
+    const message = chatInput.value.trim();
+    if (message) {
+      chatbot.addUserMessage(message);
+      chatInput.value = '';
+
+      const currentStep = chatbot.getCurrentQuestion();
+      
+      if (currentStep.type === 'itens' && chatbot.currentItem) {
+        if (!chatbot.currentItem.valor) {
+          chatbot.processItemValor(message);
+        } else if (!chatbot.currentItem.quantidade) {
+          chatbot.processItemQuantidade(message);
+        }
+      } else if (message.toLowerCase() === 'próximo' || message.toLowerCase() === 'proximo') {
+        chatbot.skipStepAndContinue();
+      } else {
+        const nextStep = chatbot.processAnswer(message);
+        if (nextStep) {
+          if (nextStep.field === 'finalizacao') {
+            chatbot.addBotMessage("✅ **Orçamento completo!** O que deseja fazer agora?");
+            chatbot.showFinalActions();
+          } else {
+            chatbot.addBotMessage(nextStep.question);
+            chatbot.showActions();
+          }
+        }
+      }
+    }
+  }
+
+  // =============================================
+  // CÓDIGO ORIGINAL DA APLICAÇÃO COM CORREÇÕES
+  // =============================================
+
   const fmt = new Intl.NumberFormat('pt-BR',{ style:'currency', currency:'BRL' });
 
-  // Elementos - Header
+  // Elementos
   const titleEl = document.querySelector('title');
-  const originalTitle = titleEl.textContent; 
+  const originalTitle = titleEl.textContent;
   const brandContainerEl = document.getElementById('brand-container');
   const logoImgEl = document.getElementById('logo-img');
   const logoUploadInput = document.getElementById('logo-upload');
@@ -1048,16 +1840,15 @@
   const validadeInput = document.getElementById('validade');
   const validadeBadge = document.getElementById('validade-badge');
 
-  // Elementos - Inputs Principais
   const clienteNome = document.getElementById('cliente-nome');
   const clienteDoc = document.getElementById('cliente-doc');
   const clienteTel = document.getElementById('cliente-tel');
   const veicPlaca = document.getElementById('veic-placa');
-  const veicMarca = document.getElementById('veic-marca'); 
+  const veicMarca = document.getElementById('veic-marca');
   const veicModelo = document.getElementById('veic-modelo');
   const veicAnoFabricacao = document.getElementById('veic-ano-fabricacao');
   const veicAnoModelo = document.getElementById('veic-ano-modelo');
-  const veicCor = document.getElementById('veic-cor'); 
+  const veicCor = document.getElementById('veic-cor');
   const veicKm = document.getElementById('veic-km');
   const diagnostico = document.getElementById('diagnostico');
   const prazo = document.getElementById('prazo');
@@ -1068,28 +1859,23 @@
   const assinatura = document.getElementById('assinatura');
   const obsInterna = document.getElementById('obs-interna');
   
-  // Responsáveis
   const mecanicoResp = document.getElementById('mecanico-resp');
   const consultorResp = document.getElementById('consultor-resp');
 
-  // Elementos - Itens e Totais
   const itensBody = document.getElementById('itens-body');
   const totalPecasEl = document.getElementById('total-pecas');
   const totalMdoEl = document.getElementById('total-mdo');
   const totalGeralEl = document.getElementById('total-geral');
 
-  // Elementos - Ações
   const btnAddItem = document.getElementById('btn-add-item');
   const btnImprimir = document.getElementById('btn-imprimir');
-  const btnSalvar = document.getElementById('btn-salvar');
   const btnLimpar = document.getElementById('btn-limpar');
   const btnExportJson = document.getElementById('btn-export-json');
-  const btnResetOs = document.getElementById('btn-reset-os'); 
+  const btnResetOs = document.getElementById('btn-reset-os');
   const btnConsultarPlaca = document.getElementById('btn-consultar-placa');
   const btnWhatsapp = document.getElementById('btn-whatsapp');
   const btnCopyAll = document.getElementById('btn-copy-all');
 
-  // Elementos - Modal Item
   const itemModal = document.getElementById('item-modal');
   const modalTitle = document.getElementById('modal-title');
   const btnCloseModalItem = document.getElementById('btn-close-modal-item');
@@ -1101,7 +1887,6 @@
   const itemValorInput = document.getElementById('item-valor');
   const itemObsTextarea = document.getElementById('item-obs');
 
-  // Elementos - Modal Configuração
   const configModal = document.getElementById('config-modal');
   const btnCloseModalConfig = document.getElementById('btn-close-modal-config');
   const btnCancelModalConfig = document.getElementById('btn-cancel-modal-config');
@@ -1110,7 +1895,6 @@
   const configTelefoneInput = document.getElementById('config-telefone');
   const configEnderecoTextarea = document.getElementById('config-endereco');
   
-  // Elementos do Modal de Cópia
   const copyModal = document.getElementById('copy-modal');
   const suggestedTitleEl = document.getElementById('suggested-title');
   const btnCloseCopyModal = document.getElementById('btn-close-copy-modal');
@@ -1118,7 +1902,6 @@
   const copyBtn = document.getElementById('copy-btn');
   const generatePdfBtn = document.getElementById('generate-pdf-btn');
 
-  // Elementos de Assinatura
   const signatureClient = document.getElementById('signature-client');
   const signatureMechanic = document.getElementById('signature-mechanic');
   const btnClearClient = document.getElementById('btn-clear-client');
@@ -1126,10 +1909,10 @@
   const btnClearMechanic = document.getElementById('btn-clear-mechanic');
   const btnSaveMechanic = document.getElementById('btn-save-mechanic');
 
-  // Container para informações do veículo
   const vehicleInfoContainer = document.getElementById('vehicle-info-container');
   const vehicleInfoContent = document.getElementById('vehicle-info-content');
-  const vehicleInfoPagePrint = document.getElementById('vehicle-info-page-print'); 
+  const vehicleInfoPagePrint = document.getElementById('vehicle-info-page-print');
+  const vehicleInfoPdfContainer = document.getElementById('vehicle-info-pdf-container');
 
   let editingItemIndex = -1;
   let isDrawing = false;
@@ -1137,7 +1920,7 @@
   let lastY = 0;
   let currentCanvas = null;
 
-  // Dados (Estado Inicial/Padrão)
+  // Dados
   let orcamento = {
     numero: 1,
     dataEmissao: new Date().toISOString().slice(0,10),
@@ -1145,7 +1928,7 @@
     oficina: { nome:'Auto Box Mecânica', telefone:'(99) 9 9999-9999', endereco:'Rua Exemplo, 123', logoUrl: '' },
     cliente: {},
     veiculo: {},
-    responsaveis: { mecanico: '', consultor: '' }, 
+    responsaveis: { mecanico: '', consultor: '' },
     diagnostico: '',
     itens: [],
     prazo: '',
@@ -1157,7 +1940,6 @@
       cliente: '',
       mecanico: ''
     },
-    // Novos campos para armazenar todas as informações da API
     veiculoCompleto: {
       informacoesBasicas: {},
       informacoesExtra: {},
@@ -1166,25 +1948,24 @@
     }
   };
   
-  // --- FUNÇÕES DE MÁSCARA E FORMATAÇÃO ---
-
+  // --- FUNÇÕES DE MÁSCARA ---
   const cleanNumber = (value) => value ? value.toString().replace(/\D/g, '') : '';
   const cleanAlphaNumeric = (value) => value ? value.toString().replace(/[^a-zA-Z0-9]/g, '') : '';
 
   function maskCpfCnpj(value) {
       const v = cleanNumber(value);
-      if (v.length <= 11) { 
+      if (v.length <= 11) {
           return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4').slice(0, 14);
-      } else { 
+      } else {
           return v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5').slice(0, 18);
       }
   }
 
   function maskPhone(value) {
       const v = cleanNumber(value).slice(0, 11);
-      if (v.length <= 10) { 
+      if (v.length <= 10) {
           return v.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-      } else { 
+      } else {
           return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
       }
   }
@@ -1231,7 +2012,7 @@
 
   function formatDateBr(iso){
     if(!iso) return '';
-    const d = new Date(iso + 'T00:00:00'); 
+    const d = new Date(iso + 'T00:00:00');
     if(isNaN(d)) return iso;
     const day = String(d.getDate()).padStart(2,'0');
     const month = String(d.getMonth()+1).padStart(2,'0');
@@ -1240,7 +2021,6 @@
   }
 
   // --- LÓGICA DE NEGÓCIO ---
-
   function calcularTotais() {
     let totalPecas = 0;
     let totalMDO = 0;
@@ -1326,7 +2106,6 @@
       renderAll();
   }
 
-  // Lógica de Salvamento e Configuração
   btnSaveItem.addEventListener('click', () => {
     const descricao = itemDescricaoInput.value.trim();
     const tipo = itemTipoSelect.value;
@@ -1368,8 +2147,6 @@
   });
 
   // --- FUNÇÕES DE CONSULTA DE PLACA ---
-  
-  // 🚨 ATENÇÃO: EM PRODUÇÃO, NUNCA EXPOR O TOKEN NO FRONTEND COMO AQUI!
   const TOKEN = "41345b4cfc0993884e04cbcd0de66fa1";
   const API_BASE_URL = "https://wdapi2.com.br/consulta/";
 
@@ -1381,7 +2158,6 @@
       return;
     }
 
-    // Mostrar indicador de carregamento
     btnConsultarPlaca.textContent = "⏳ Buscando...";
     btnConsultarPlaca.disabled = true;
 
@@ -1392,7 +2168,6 @@
       const data = await response.json();
       
       if (response.ok) {
-        // Processar e armazenar todos os dados da API
         processarDadosAPI(data);
         alert('Dados do veículo preenchidos automaticamente!');
         persist();
@@ -1406,14 +2181,12 @@
       console.error('Erro na requisição:', error);
       alert("Não foi possível conectar à API. Verifique sua conexão.");
     } finally {
-      // Restaurar botão
       btnConsultarPlaca.textContent = "🔍 Buscar Placa";
       btnConsultarPlaca.disabled = false;
     }
   }
 
   function processarDadosAPI(data) {
-    // Limpar dados anteriores
     orcamento.veiculoCompleto = {
       informacoesBasicas: {},
       informacoesExtra: {},
@@ -1430,7 +2203,6 @@
       veicModelo.value = data.modelo;
       orcamento.veiculoCompleto.informacoesBasicas.modelo = data.modelo;
     }
-    // REMOVIDOS: Submodelo e Versão, mas os dados completos continuam armazenados para o PDF
     if (data.submodelo) {
       orcamento.veiculoCompleto.informacoesBasicas.submodelo = data.submodelo;
     }
@@ -1449,7 +2221,9 @@
       veicCor.value = data.cor;
       orcamento.veiculoCompleto.informacoesBasicas.cor = data.cor;
     }
-    if (data.chassi) {
+    if (data.extra && data.extra.chassi) {
+      orcamento.veiculoCompleto.informacoesBasicas.chassi = data.extra.chassi;
+    } else if (data.chassi) {
       orcamento.veiculoCompleto.informacoesBasicas.chassi = data.chassi;
     }
     if (data.placa) {
@@ -1481,7 +2255,6 @@
 
     // Informações FIPE
     if (data.fipe && data.fipe.dados && data.fipe.dados.length > 0) {
-      // Pegar o item com maior score
       const melhorFipe = data.fipe.dados.reduce((prev, current) => 
         (prev.score > current.score) ? prev : current
       );
@@ -1499,38 +2272,46 @@
       orcamento.veiculoCompleto.situacao.dataConsulta = data.data;
     }
 
-    // Atualizar interface
     renderAll();
     renderVehicleInfo();
   }
 
   // --- FUNÇÕES DE ASSINATURA DIGITAL ---
-  
   function initSignatureCanvas() {
-    // Configurar ambos os canvas
-    const canvases = [signatureClient, signatureMechanic];
+  const canvases = [signatureClient, signatureMechanic];
+  
+  canvases.forEach(canvas => {
+    canvas.width = 400;
+    canvas.height = 150;
     
-    canvases.forEach(canvas => {
+    const ctx = canvas.getContext('2d');
+    // MUDANÇA: Usar cor hexadecimal azul
+    ctx.strokeStyle = '#0f62fe'; // Ou qualquer cor hexadecimal que você quiser
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    
+    canvas.addEventListener('touchstart', startDrawingTouch);
+    canvas.addEventListener('touchmove', drawTouch);
+    canvas.addEventListener('touchend', stopDrawing);
+  });
+}
+  
+  function drawSignatureImage(canvas, dataURL) {
       const ctx = canvas.getContext('2d');
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      
-      // Limpar canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Adicionar eventos
-      canvas.addEventListener('mousedown', startDrawing);
-      canvas.addEventListener('mousemove', draw);
-      canvas.addEventListener('mouseup', stopDrawing);
-      canvas.addEventListener('mouseout', stopDrawing);
-      
-      // Para dispositivos touch
-      canvas.addEventListener('touchstart', startDrawingTouch);
-      canvas.addEventListener('touchmove', drawTouch);
-      canvas.addEventListener('touchend', stopDrawing);
-    });
+      const img = new Image();
+      img.onload = function() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      };
+      img.src = dataURL;
   }
   
   function startDrawing(e) {
@@ -1596,7 +2377,8 @@
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Remover do orçamento
+    canvas.removeAttribute('data-has-signature');
+    
     if (canvasId === 'signature-client') {
       orcamento.assinaturas.cliente = '';
     } else if (canvasId === 'signature-mechanic') {
@@ -1610,7 +2392,8 @@
     const canvas = document.getElementById(canvasId);
     const dataURL = canvas.toDataURL('image/png');
     
-    // Salvar no orçamento
+    canvas.setAttribute('data-has-signature', 'true');
+    
     if (canvasId === 'signature-client') {
       orcamento.assinaturas.cliente = dataURL;
     } else if (canvasId === 'signature-mechanic') {
@@ -1622,180 +2405,141 @@
   }
   
   function loadSignatures() {
-    // Carregar assinaturas salvas
     if (orcamento.assinaturas.cliente) {
-      const img = new Image();
-      img.onload = function() {
-        const ctx = signatureClient.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-      };
-      img.src = orcamento.assinaturas.cliente;
+      drawSignatureImage(signatureClient, orcamento.assinaturas.cliente);
+      signatureClient.setAttribute('data-has-signature', 'true');
     }
     
     if (orcamento.assinaturas.mecanico) {
-      const img = new Image();
-      img.onload = function() {
-        const ctx = signatureMechanic.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-      };
-      img.src = orcamento.assinaturas.mecanico;
+      drawSignatureImage(signatureMechanic, orcamento.assinaturas.mecanico);
+      signatureMechanic.setAttribute('data-has-signature', 'true');
     }
   }
 
-  // --- FUNÇÃO PARA RENDERIZAR INFORMAÇÕES DO VEÍCULO NA INTERFACE (VISUALIZAÇÃO NORMAL) ---
-  
+  // --- FUNÇÃO PARA RENDERIZAR INFORMAÇÕES DO VEÍCULO ---
   function renderVehicleInfo() {
-    // 1. Conteúdo de Visualização Normal
     let htmlContent = '';
     
     if (Object.keys(orcamento.veiculoCompleto.informacoesBasicas).length === 0) {
-      htmlContent = '<p class="muted">As informações completas do veículo aparecerão aqui após a consulta da placa.</p>';
+      htmlContent = '<p class="muted" style="padding: 16px;">As informações completas do veículo aparecerão aqui após a consulta da placa.</p>';
     } else {
-      // Exibição mais concisa na tela
-      htmlContent += `<div class="vehicle-detail-grid">`;
       const basic = orcamento.veiculoCompleto.informacoesBasicas;
-      if (basic.chassi) htmlContent += `<div class="vehicle-detail-item"><div class="vehicle-detail-label">Chassi:</div><div class="vehicle-detail-value">${basic.chassi}</div></div>`;
-      if (basic.municipio) htmlContent += `<div class="vehicle-detail-item"><div class="vehicle-detail-label">Município/UF:</div><div class="vehicle-detail-value">${basic.municipio} - ${basic.uf}</div></div>`;
-      if (orcamento.veiculoCompleto.situacao.situacao) htmlContent += `<div class="vehicle-detail-item"><div class="vehicle-detail-label">Situação:</div><div class="vehicle-detail-value">${orcamento.veiculoCompleto.situacao.situacao}</div></div>`;
-      if (orcamento.veiculoCompleto.informacoesFipe.texto_valor) htmlContent += `<div class="vehicle-detail-item"><div class="vehicle-detail-label">Valor FIPE:</div><div class="vehicle-detail-value">${orcamento.veiculoCompleto.informacoesFipe.texto_valor}</div></div>`;
+      const extra = orcamento.veiculoCompleto.informacoesExtra;
+      const fipe = orcamento.veiculoCompleto.informacoesFipe;
+      const situacao = orcamento.veiculoCompleto.situacao;
+      
+      if (basic.logo) {
+          htmlContent += `
+              <div id="vehicle-logo-display">
+                  <img src="${basic.logo}" alt="Logo ${basic.marca}" onerror="this.style.display='none'">
+              </div>
+          `;
+      }
+      
+      htmlContent += `<div class="vehicle-detail-grid-display">`;
+      
+      const addItem = (label, value) => {
+        if (value) {
+            htmlContent += `
+                <div class="vehicle-detail-item-display">
+                    <div class="vehicle-detail-label-display">${label}</div>
+                    <div class="vehicle-detail-value-display">${value}</div>
+                </div>
+            `;
+        }
+      };
+      
+      addItem('Marca', basic.marca);
+      addItem('Modelo', basic.modelo);
+      addItem('Ano Fab.', basic.anoFabricacao);
+      addItem('Ano Mod.', basic.anoModelo);
+      addItem('Cor', basic.cor);
+      addItem('Placa Completa', basic.placa);
+      addItem('Chassi', basic.chassi || 'Não Informado');
+      addItem('Origem', basic.origem);
+      addItem('Município/UF', `${basic.municipio || 'N/I'} - ${basic.uf || 'N/I'}`);
+      
+      addItem('Combustível', extra.combustivel);
+      addItem('Cilindradas', extra.cilindradas);
+      addItem('Tipo Veículo', extra.tipo_veiculo || extra.especie);
+      addItem('Carroceria', extra.carroceria);
+      addItem('Passageiros', extra.quantidade_passageiro);
+      
+      addItem('Situação', situacao.situacao);
+      
+      addItem('Valor FIPE', fipe.texto_valor);
+      addItem('Ano Modelo FIPE', fipe.ano_modelo);
+      addItem('Mês Ref. FIPE', fipe.mes_referencia);
+
       htmlContent += `</div>`;
-      htmlContent += `<div style="margin-top: 10px; text-align: center; font-style: italic; font-size: 11px;">
-        Mais detalhes disponíveis na versão para impressão.
-      </div>`;
     }
     
     vehicleInfoContent.innerHTML = htmlContent;
     
-    // 2. Pré-renderiza a página completa para impressão (Corrigindo o problema do mobile)
-    criarPaginaInformacoesVeiculo();
+    criarInformacoesVeiculoPDF();
   }
 
-  // --- FUNÇÃO PARA GERAR O HTML DA PÁGINA DE INFORMAÇÕES DO VEÍCULO (PARA IMPRESSÃO) ---
-  
-  function criarPaginaInformacoesVeiculo() {
-    // ⚠️ Importante: não limpa o container principal, apenas a div de impressão.
-    vehicleInfoPagePrint.innerHTML = '';
-    
+  function criarInformacoesVeiculoPDF() {
     if (Object.keys(orcamento.veiculoCompleto.informacoesBasicas).length === 0) {
-      return; 
+      vehicleInfoPdfContainer.innerHTML = '';
+      return;
     }
+    
+    const basic = orcamento.veiculoCompleto.informacoesBasicas;
+    const extra = orcamento.veiculoCompleto.informacoesExtra;
+    const fipe = orcamento.veiculoCompleto.informacoesFipe;
+    const situacao = orcamento.veiculoCompleto.situacao;
     
     let html = `
-      <h2>INFORMAÇÕES COMPLETAS DO VEÍCULO</h2>
+      <div class="vehicle-info-pdf">
+        <h3>INFORMAÇÕES COMPLETAS DO VEÍCULO</h3>
+        <div class="vehicle-detail-grid-pdf">
     `;
     
-    // Logo da marca (se disponível)
-    if (orcamento.veiculoCompleto.informacoesBasicas.logo) {
-      html += `
-        <div class="vehicle-logo">
-          <img src="${orcamento.veiculoCompleto.informacoesBasicas.logo}" alt="Logo ${orcamento.veiculoCompleto.informacoesBasicas.marca}">
-        </div>
-      `;
-    }
-    
-    // Informações Básicas
-    html += `
-      <div class="vehicle-section">
-        <h3>INFORMAÇÕES BÁSICAS</h3>
-        <div class="vehicle-detail-grid">
-    `;
-    
-    // Lista completa de campos a serem exibidos no PDF
-    const fieldsMap = {
-      // Básicas
-      marca: 'Marca', modelo: 'Modelo', submodelo: 'Submodelo', versao: 'Versão', // Mantém submodelo/versão no PDF
-      anoFabricacao: 'Ano Fabricação', anoModelo: 'Ano Modelo', cor: 'Cor', 
-      placa: 'Placa', placaAlternativa: 'Placa Alternativa', chassi: 'Chassi', 
-      origem: 'Origem', municipio: 'Município', uf: 'UF',
-      // Extra
-      combustivel: 'Combustível', cilindradas: 'Cilindradas', categoria: 'Categoria',
-      especie: 'Espécie', tipo_veiculo: 'Tipo de Veículo', carroceria: 'Carroceria', 
-      quantidade_passageiro: 'Passageiros', peso_bruto_total: 'Peso Bruto Total', 
-      cap_maxima_tracao: 'Capacidade Máxima Tração'
-    };
-    
-    // Junta as informações de diferentes seções para o loop
-    const allInfo = {
-        ...orcamento.veiculoCompleto.informacoesBasicas,
-        ...orcamento.veiculoCompleto.informacoesExtra,
-    };
-    
-    Object.entries(fieldsMap).forEach(([key, label]) => {
-      const value = allInfo[key];
+    const addItemPDF = (label, value) => {
       if (value) {
         html += `
-          <div class="vehicle-detail-item">
-            <div class="vehicle-detail-label">${label}:</div>
-            <div class="vehicle-detail-value">${value}</div>
+          <div class="vehicle-detail-item-pdf">
+            <div class="vehicle-detail-label-pdf">${label}</div>
+            <div class="vehicle-detail-value-pdf">${value}</div>
           </div>
         `;
       }
-    });
+    };
+    
+    addItemPDF('Marca', basic.marca);
+    addItemPDF('Modelo', basic.modelo);
+    addItemPDF('Ano Fab.', basic.anoFabricacao);
+    addItemPDF('Ano Mod.', basic.anoModelo);
+    addItemPDF('Cor', basic.cor);
+    addItemPDF('Placa Completa', basic.placa);
+    addItemPDF('Chassi', basic.chassi);
+    addItemPDF('Origem', basic.origem);
+    addItemPDF('Município/UF', `${basic.municipio || ''} - ${basic.uf || ''}`);
+    
+    addItemPDF('Combustível', extra.combustivel);
+    addItemPDF('Cilindradas', extra.cilindradas);
+    addItemPDF('Tipo Veículo', extra.tipo_veiculo || extra.especie);
+    addItemPDF('Carroceria', extra.carroceria);
+    addItemPDF('Passageiros', extra.quantidade_passageiro);
+    
+    addItemPDF('Situação', situacao.situacao);
+    
+    addItemPDF('Valor FIPE', fipe.texto_valor);
+    addItemPDF('Ano Modelo FIPE', fipe.ano_modelo);
+    addItemPDF('Mês Ref. FIPE', fipe.mes_referencia);
     
     html += `
         </div>
       </div>
     `;
     
-    // Informações FIPE
-    if (Object.keys(orcamento.veiculoCompleto.informacoesFipe).length > 0) {
-      html += `
-        <div class="vehicle-section">
-          <h3>TABELA FIPE</h3>
-          <div class="vehicle-detail-grid">
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Valor FIPE:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.informacoesFipe.texto_valor}</div>
-            </div>
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Mês Referência:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.informacoesFipe.mes_referencia}</div>
-            </div>
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Combustível FIPE:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.informacoesFipe.combustivel}</div>
-            </div>
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Ano Modelo FIPE:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.informacoesFipe.ano_modelo}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-    
-    // Situação do Veículo
-    if (Object.keys(orcamento.veiculoCompleto.situacao).length > 0) {
-      html += `
-        <div class="vehicle-section">
-          <h3>SITUAÇÃO DO VEÍCULO</h3>
-          <div class="vehicle-detail-grid">
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Situação:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.situacao.situacao}</div>
-            </div>
-            <div class="vehicle-detail-item">
-              <div class="vehicle-detail-label">Data da Consulta:</div>
-              <div class="vehicle-detail-value">${orcamento.veiculoCompleto.situacao.dataConsulta}</div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-    
-    html += `
-      <div style="margin-top: 20px; text-align: center; font-style: italic; font-size: 11px;">
-        Dados consultados via API de consulta de placas - ${new Date().toLocaleDateString('pt-BR')}
-      </div>
-    `;
-    
-    vehicleInfoPagePrint.innerHTML = html;
+    vehicleInfoPdfContainer.innerHTML = html;
   }
 
   // --- FUNÇÕES DE IMPRESSÃO/PDF ---
-  
   function prepareForPrint() {
-    // Ocultar campos vazios
+    // CORREÇÃO: Marcar campos vazios
     const inputs = document.querySelectorAll('input, textarea');
     inputs.forEach(input => {
       if (!input.value.trim() && input.value.trim() !== '0') {
@@ -1805,44 +2549,79 @@
       }
     });
     
-    // Formatar KM para exibição
-    veicKm.value = formatKmForDisplay(veicKm.value);
+    // CORREÇÃO: Marcar cards vazios
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      const hasContent = Array.from(card.querySelectorAll('input, textarea, table tbody tr'))
+        .some(el => {
+          if (el.tagName === 'TR') {
+            return true;
+          }
+          return el.value && el.value.trim() && !el.classList.contains('empty-field');
+        });
+      
+      if (!hasContent) {
+        card.classList.add('empty-card');
+      } else {
+        card.classList.remove('empty-card');
+      }
+    });
     
-    // Aplicar destaque vermelho para placa no print
+    // CORREÇÃO: Marcar seções vazias
+    const sections = document.querySelectorAll('.row, .signature-section, .signature-box');
+    sections.forEach(section => {
+      const hasContent = Array.from(section.querySelectorAll('input, textarea, canvas'))
+        .some(el => {
+          if (el.tagName === 'CANVAS') {
+            return el.hasAttribute('data-has-signature');
+          }
+          return el.value && el.value.trim() && !el.classList.contains('empty-field');
+        });
+      
+      if (!hasContent) {
+        section.classList.add('empty-section');
+      } else {
+        section.classList.remove('empty-section');
+      }
+    });
+    
+    if (veicKm.value.trim()) {
+      veicKm.value = formatKmForDisplay(veicKm.value);
+    }
+    
     veicPlaca.classList.add('placa-destaque-print');
     
-    // Definir título da página
+    vehicleInfoContainer.style.display = 'none';
+    vehicleInfoPdfContainer.style.display = 'block';
+    
     const orcNumFmt = String(orcamento.numero).padStart(4,'0');
     const fileNameSuffix = getFileNameSuffix();
     titleEl.textContent = `Orçamento_${orcNumFmt}${fileNameSuffix}`;
   }
   
   function restoreAfterPrint() {
-    // Restaurar campos
-    const inputs = document.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-      input.classList.remove('empty-field');
+    const elements = document.querySelectorAll('.empty-field, .empty-section, .empty-card');
+    elements.forEach(el => {
+      el.classList.remove('empty-field', 'empty-section', 'empty-card');
     });
     
-    // Remover destaque da placa
     veicPlaca.classList.remove('placa-destaque-print');
     
-    // Restaurar título original
+    vehicleInfoContainer.style.display = 'block';
+    vehicleInfoPdfContainer.style.display = 'none';
+    
     titleEl.textContent = originalTitle;
     
-    // Restaurar KM original
     const originalKm = orcamento.veiculo.km || '';
     veicKm.value = originalKm;
   }
 
-  // --- FUNÇÃO PARA COPIAR TODAS AS INFORMAÇÕES (BASE PARA WHATSAPP) ---
-
+  // --- FUNÇÃO PARA COPIAR TODAS AS INFORMAÇÕES ---
   function getFullMessageText(isWhatsapp = false) {
       persist();
       
       let texto = `*ORÇAMENTO Nº ${String(orcamento.numero).padStart(4, '0')} - ${orcamento.oficina.nome}*\n\n`;
       
-      // Dados do cliente
       texto += `*DADOS DO CLIENTE:*\n`;
       if (clienteNome.value.trim()) texto += `Nome: ${clienteNome.value}\n`;
       if (clienteDoc.value.trim()) texto += `CPF/CNPJ: ${clienteDoc.value}\n`;
@@ -1852,18 +2631,14 @@
       if (veicPlaca.value.trim()) texto += `Placa: ${veicPlaca.value}\n`;
       if (veicMarca.value.trim()) texto += `Marca: ${veicMarca.value}\n`;
       if (veicModelo.value.trim()) texto += `Modelo: ${veicModelo.value}\n`;
-      // Os campos Submodelo e Versão são omitidos aqui
       if (veicAnoFabricacao.value.trim() || veicAnoModelo.value.trim()) texto += `Ano Fab/Mod: ${veicAnoFabricacao.value || 'N/I'}/${veicAnoModelo.value || 'N/I'}\n`;
       if (veicCor.value.trim()) texto += `Cor: ${veicCor.value}\n`;
       
-      // KM: Usar o número limpo (armazenado em orcamento.veiculo.km)
       const kmValue = orcamento.veiculo.km;
       if (kmValue) {
-          // Apenas o número limpo, sem separador de milhares ou "km"
           texto += `Km: ${kmValue}\n`;
       }
       
-      // NOVO: Informações completas do veículo (se disponíveis)
       if (Object.keys(orcamento.veiculoCompleto.informacoesBasicas).length > 0) {
         const basic = orcamento.veiculoCompleto.informacoesBasicas;
         const extra = orcamento.veiculoCompleto.informacoesExtra;
@@ -1871,28 +2646,19 @@
         const situacao = orcamento.veiculoCompleto.situacao;
 
         texto += `\n*DADOS COMPLETOS (API):*\n`;
-        // Chassi COMPLETO
-        if (basic.chassi) texto += `Chassi: ${basic.chassi}\n`; 
-        // Origem
-        if (basic.origem) texto += `Origem: ${basic.origem}\n`; 
-        // Combustível
-        if (extra.combustivel) texto += `Combustível: ${extra.combustivel}\n`; 
-        // Cilindradas
-        if (extra.cilindradas) texto += `Cilindradas: ${extra.cilindradas}\n`; 
-        // Tipo (usando 'tipo_veiculo' ou 'especie' da API, se disponível)
+        if (basic.chassi) texto += `Chassi: ${basic.chassi}\n`;
+        if (basic.origem) texto += `Origem: ${basic.origem}\n`;
+        if (extra.combustivel) texto += `Combustível: ${extra.combustivel}\n`;
+        if (extra.cilindradas) texto += `Cilindradas: ${extra.cilindradas}\n`;
         const tipoVeiculo = extra.tipo_veiculo || extra.especie;
-        if (tipoVeiculo) texto += `Tipo: ${tipoVeiculo}\n`; 
-        // Situação
+        if (tipoVeiculo) texto += `Tipo: ${tipoVeiculo}\n`;
         if (situacao.situacao) texto += `Situação: ${situacao.situacao}\n`;
-        // Valor FIPE
         if (fipe.texto_valor) texto += `Valor FIPE: ${fipe.texto_valor}\n`;
 
         texto += `---------------------------------\n`;
       }
       
       texto += `\n*DIAGNÓSTICO:*\n${diagnostico.value || 'Não informado'}\n`;
-      
-      // REMOVIDO: A seção RESPONSÁVEIS
       
       texto += `\n*ITENS DO ORÇAMENTO:*\n`;
       
@@ -1902,7 +2668,6 @@
       if (orcamento.itens.length > 0) {
         orcamento.itens.forEach((item, index) => {
           const subtotal = item.qtd * item.valor;
-          // Formato: 1. Descrição (Tipo) - Qtd x ValorUnit = Subtotal
           texto += `${index + 1}. ${item.descricao} (${item.tipo === 'PECA' ? 'Peça' : 'M.O.'}) - ${item.qtd}x ${fmt.format(item.valor)} = ${fmt.format(subtotal)}\n`;
           
           if (item.tipo === 'PECA') totalPecas += subtotal;
@@ -1919,23 +2684,16 @@
       texto += `Mão de Obra: ${fmt.format(totalMDO)}\n`;
       texto += `*TOTAL GERAL: ${fmt.format(totalGeral)}*\n\n`;
       
-      // Condições
       texto += `*CONDIÇÕES:*\n`;
       if (prazo.value.trim()) texto += `Prazo: ${prazo.value}\n`;
       if (garantia.value.trim()) texto += `Garantia: ${garantia.value}\n`;
       if (condicoes.value.trim()) texto += `Pagamento: ${condicoes.value}\n`;
       
-      // Seção APROVAÇÃO (condicional, pois não estava no exemplo)
       if (aprovador.value.trim() || dataAprov.value.trim() || assinatura.value.trim()) {
         texto += `\n*APROVAÇÃO:*\n`;
         if (aprovador.value.trim()) texto += `Aprovador: ${aprovador.value}\n`;
         if (dataAprov.value.trim()) texto += `Data: ${formatDateBr(dataAprov.value)}\n`;
         if (assinatura.value.trim()) texto += `Assinatura: ${assinatura.value}\n`;
-      }
-      
-      // Omitir OBS INTERNA no WhatsApp, mas incluir na cópia geral
-      if (obsInterna.value.trim() && !isWhatsapp) {
-        texto += `\n*OBSERVAÇÕES INTERNAS:*\n${obsInterna.value}\n`;
       }
       
       texto += `\n_Orçamento válido por ${validadeInput.value} dias_\n`;
@@ -1945,9 +2703,8 @@
   }
 
   function copiarTodasInformacoes() {
-    const texto = getFullMessageText(false); // Não é WhatsApp, inclui observações internas e detalhes
+    const texto = getFullMessageText(false);
     
-    // Copiar para área de transferência
     navigator.clipboard.writeText(texto).then(() => {
       alert('Todas as informações do orçamento foram copiadas para a área de transferência!');
     }).catch(err => {
@@ -1956,15 +2713,61 @@
     });
   }
   
-  // CORREÇÃO: Abre o WhatsApp sem número de destino para o usuário escolher o contato
   function enviarWhatsApp() {
-    const mensagem = getFullMessageText(true); 
+    const mensagem = getFullMessageText(true);
     const mensagemCodificada = encodeURIComponent(mensagem);
     
-    // URL universal do WhatsApp (sem número)
     const urlWhatsApp = `https://wa.me/?text=${mensagemCodificada}`;
     
     window.open(urlWhatsApp, '_blank');
+  }
+
+  function limparTudo() {
+    if(!confirm('Tem certeza que deseja LIMPAR TODOS os dados do orçamento? Todos os campos serão resetados para o estado inicial.')) return;
+    
+    const allInputs = document.querySelectorAll('input, textarea');
+    allInputs.forEach(input => {
+      if (input.id !== 'validade') {
+        input.value = '';
+      }
+    });
+    
+    validadeInput.value = '7';
+    
+    clearSignature('signature-client');
+    clearSignature('signature-mechanic');
+    
+    orcamento = {
+      numero: orcamento.numero,
+      dataEmissao: new Date().toISOString().slice(0,10),
+      validadeDias: 7,
+      oficina: orcamento.oficina,
+      responsaveis: { mecanico: '', consultor: '' },
+      cliente: {},
+      veiculo: {},
+      diagnostico: '',
+      itens: [],
+      prazo: '',
+      garantia: '',
+      condicoes: '',
+      aprovacao: {},
+      obsInterna: '',
+      assinaturas: {
+        cliente: '',
+        mecanico: ''
+      },
+      veiculoCompleto: {
+        informacoesBasicas: {},
+        informacoesExtra: {},
+        informacoesFipe: {},
+        situacao: {}
+      }
+    };
+    
+    persist();
+    renderAll();
+    
+    alert('Todos os dados foram limpos com sucesso!');
   }
 
   // Inicialização
@@ -1979,7 +2782,7 @@
             endereco: loadedData.oficina.endereco || 'Endereço da oficina',
             logoUrl: loadedData.oficina.logoUrl || ''
         };
-        orcamento.responsaveis = loadedData.responsaveis || { mecanico: '', consultor: '' }; 
+        orcamento.responsaveis = loadedData.responsaveis || { mecanico: '', consultor: '' };
         orcamento.assinaturas = loadedData.assinaturas || { cliente: '', mecanico: '' };
         orcamento.veiculoCompleto = loadedData.veiculoCompleto || {
           informacoesBasicas: {},
@@ -1988,14 +2791,13 @@
           situacao: {}
         };
 
-        // Certifique-se de que orcamento.veiculo.km está definido para evitar erros no restoreAfterPrint
         if(!loadedData.veiculo || typeof loadedData.veiculo.km === 'undefined') {
              loadedData.veiculo = loadedData.veiculo || {};
              loadedData.veiculo.km = '';
         }
 
         Object.assign(orcamento, loadedData);
-        orcamento.numero = Number(loadedData.numero) || 1; 
+        orcamento.numero = Number(loadedData.numero) || 1;
 
       }catch(e){
         console.warn('Falha ao ler localStorage:', e);
@@ -2005,15 +2807,13 @@
         orcamento.numero = Number(localStorage.getItem('orcamento_numero') || 1);
     }
     
-    // Inicializar canvas de assinatura
     initSignatureCanvas();
-    loadSignatures();
+    setTimeout(loadSignatures, 100);
     
     renderAll();
   }
   
   function renderAll(){
-    // Cabeçalho e Logo
     const hasLogo = !!orcamento.oficina.logoUrl;
     brandContainerEl.classList.toggle('has-logo', hasLogo);
     logoImgEl.src = orcamento.oficina.logoUrl || '';
@@ -2025,19 +2825,16 @@
     dataEmissaoEl.textContent = formatDateBr(orcamento.dataEmissao);
     validadeBadge.textContent = `Validade: ${orcamento.validadeDias || 7} dias`;
 
-    // preencher campos (inputs)
     clienteNome.value = orcamento.cliente.nome || '';
     clienteDoc.value = orcamento.cliente.doc ? maskCpfCnpj(orcamento.cliente.doc) : '';
     clienteTel.value = orcamento.cliente.tel ? maskPhone(orcamento.cliente.tel) : '';
     veicPlaca.value = orcamento.veiculo.placa ? maskPlaca(orcamento.veiculo.placa) : '';
     
-    // Campos do veículo (apenas os básicos para interface)
-    // Os campos submodelo e versão são preenchidos apenas no orcamento.veiculoCompleto, não na UI
-    veicMarca.value = orcamento.veiculoCompleto.informacoesBasicas.marca || '';
-    veicModelo.value = orcamento.veiculoCompleto.informacoesBasicas.modelo || '';
-    veicAnoFabricacao.value = orcamento.veiculoCompleto.informacoesBasicas.anoFabricacao || '';
-    veicAnoModelo.value = orcamento.veiculoCompleto.informacoesBasicas.anoModelo || '';
-    veicCor.value = orcamento.veiculoCompleto.informacoesBasicas.cor || '';
+    veicMarca.value = orcamento.veiculoCompleto.informacoesBasicas.marca || orcamento.veiculo.marca || '';
+    veicModelo.value = orcamento.veiculoCompleto.informacoesBasicas.modelo || orcamento.veiculo.modelo || '';
+    veicAnoFabricacao.value = orcamento.veiculoCompleto.informacoesBasicas.anoFabricacao || orcamento.veiculo.anoFabricacao || '';
+    veicAnoModelo.value = orcamento.veiculoCompleto.informacoesBasicas.anoModelo || orcamento.veiculo.anoModelo || '';
+    veicCor.value = orcamento.veiculoCompleto.informacoesBasicas.cor || orcamento.veiculo.cor || '';
     veicKm.value = orcamento.veiculo.km || '';
     
     diagnostico.value = orcamento.diagnostico || '';
@@ -2050,7 +2847,6 @@
     obsInterna.value = orcamento.obsInterna || '';
     validadeInput.value = orcamento.validadeDias || 7;
     
-    // Responsáveis
     mecanicoResp.value = orcamento.responsaveis.mecanico || '';
     consultorResp.value = orcamento.responsaveis.consultor || '';
 
@@ -2059,7 +2855,6 @@
     renderVehicleInfo();
   }
   
-  // salvar no localStorage
   function persist(){
     orcamento.validadeDias = Number(validadeInput.value) || 7;
 
@@ -2069,13 +2864,17 @@
       tel: cleanNumber(clienteTel.value)
     };
     
-    // Apenas dados básicos do veículo para a interface
     orcamento.veiculo = {
       placa: cleanAlphaNumeric(veicPlaca.value).toUpperCase(),
-      km: cleanNumber(veicKm.value)
+      km: cleanNumber(veicKm.value) || ''
     };
+    
+    orcamento.veiculo.marca = veicMarca.value;
+    orcamento.veiculo.modelo = veicModelo.value;
+    orcamento.veiculo.anoFabricacao = veicAnoFabricacao.value;
+    orcamento.veiculo.anoModelo = veicAnoModelo.value;
+    orcamento.veiculo.cor = veicCor.value;
 
-    // Persiste os responsáveis
     orcamento.responsaveis = {
         mecanico: mecanicoResp.value,
         consultor: consultorResp.value
@@ -2095,19 +2894,18 @@
     if(!orcamento.dataEmissao) orcamento.dataEmissao = new Date().toISOString().slice(0,10);
 
     localStorage.setItem('orcamento_oficina_v1', JSON.stringify(orcamento));
-    localStorage.setItem('orcamento_numero', String(orcamento.numero)); 
+    localStorage.setItem('orcamento_numero', String(orcamento.numero));
   }
   
-  // Função para gerar o sufixo do nome do arquivo
   function getFileNameSuffix() {
     const placa = orcamento.veiculo.placa || 'SemPlaca';
-    let marca = orcamento.veiculoCompleto.informacoesBasicas.marca || 'SemMarca'; 
-    let modelo = orcamento.veiculoCompleto.informacoesBasicas.modelo || 'SemModelo';
+    let marca = orcamento.veiculoCompleto.informacoesBasicas.marca || orcamento.veiculo.marca || 'SemMarca';
+    let modelo = orcamento.veiculoCompleto.informacoesBasicas.modelo || orcamento.veiculo.modelo || 'SemModelo';
     
     const cleanName = (name) => name
       .trim()
       .toUpperCase()
-      .replace(/[^A-Z0-9]/g, '-') 
+      .replace(/[^A-Z0-9]/g, '-')
       .replace(/-{2,}/g, '-')
       .replace(/^-+|-+$/g, '')
       .slice(0, 30);
@@ -2125,26 +2923,21 @@
     return suffix;
   }
 
-  // Função centralizada para iniciar a impressão
   function executePrint() {
       prepareForPrint();
       
-      // 1. Imprime
       window.print();
       
-      // 2. Incrementa o número do orçamento e salva (para a próxima OS)
       orcamento.numero++;
       localStorage.setItem('orcamento_numero', String(orcamento.numero));
       
-      // 3. Restaura o estado original após um curto período de tempo
       setTimeout(() => {
           restoreAfterPrint();
-          renderAll(); // Atualiza a tela com o novo número de OS
-      }, 500); 
+          renderAll();
+      }, 500);
   }
 
-  // --- FLUXO DE IMPRESSÃO: Modal de Cópia e Confirmação ---
-  
+  // --- FLUXO DE IMPRESSÃO ---
   btnImprimir.addEventListener('click', () => {
       persist();
       const orcNumFmt = String(orcamento.numero).padStart(4,'0');
@@ -2158,7 +2951,6 @@
       copyBtn.classList.add('btn-primary');
   });
 
-  // Botão "Copiar Título" (Lógica de cópia alternativa robusta)
   copyBtn.addEventListener('click', () => {
       const titleToCopy = suggestedTitleEl.textContent;
       let success = false;
@@ -2180,7 +2972,6 @@
           console.error('Falha ao usar document.execCommand:', err);
       }
 
-      // Feedback visual
       if (success) {
           copyBtn.textContent = '✅ Copiado!';
           copyBtn.classList.remove('btn-primary');
@@ -2198,13 +2989,11 @@
       }, 2000);
   });
 
-  // Botão "Gerar PDF" no Modal
   generatePdfBtn.addEventListener('click', () => {
       copyModal.style.display = 'none';
       executePrint();
   });
 
-  // Cancelar / Fechar Modal de Cópia
   const closeCopyModal = () => {
       copyModal.style.display = 'none';
   };
@@ -2228,9 +3017,10 @@
   // --- Botão Copiar Todas as Informações ---
   btnCopyAll.addEventListener('click', copiarTodasInformacoes);
 
-  // --- OUTROS EVENTOS ---
+  // CORREÇÃO: Botão Limpar Tudo
+  btnLimpar.addEventListener('click', limparTudo);
 
-  // Lógica de edição/exclusão de itens
+  // --- OUTROS EVENTOS ---
   itensBody.addEventListener('click', (e) => {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -2248,7 +3038,6 @@
     }
   });
 
-  // Eventos de inputs principais para persistência imediata
   const allInputs = [
     validadeInput, clienteNome, clienteDoc, clienteTel, veicPlaca, veicMarca, veicModelo, 
     veicAnoFabricacao, veicAnoModelo, veicCor, veicKm, 
@@ -2268,7 +3057,6 @@
     }
   });
 
-  // Evento para upload da Logo
   logoUploadInput.addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file) {
@@ -2276,37 +3064,31 @@
       reader.onload = function(e) {
         orcamento.oficina.logoUrl = e.target.result;
         persist();
-        renderAll(); 
+        renderAll();
       };
       reader.readAsDataURL(file);
     }
   });
 
-  // Máscara e cálculo em tempo real no modal de item
   itemValorInput.addEventListener('input', () => {
     itemValorInput.value = maskMoney(itemValorInput.value);
   });
 
-  // Evento para consulta de placa
   btnConsultarPlaca.addEventListener('click', consultarPlaca);
 
-  // Permitir consulta com Enter no campo de placa
   veicPlaca.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
       consultarPlaca();
     }
   });
 
-  // Evento para enviar WhatsApp
   btnWhatsapp.addEventListener('click', enviarWhatsApp);
 
-  // Eventos para assinaturas
   btnClearClient.addEventListener('click', () => clearSignature('signature-client'));
   btnSaveClient.addEventListener('click', () => saveSignature('signature-client'));
   btnClearMechanic.addEventListener('click', () => clearSignature('signature-mechanic'));
   btnSaveMechanic.addEventListener('click', () => saveSignature('signature-mechanic'));
 
-  // Eventos de botões
   btnAddItem.addEventListener('click', () => openItemModal(-1));
   btnCloseModalItem.addEventListener('click', closeItemModal);
   btnCancelModalItem.addEventListener('click', closeItemModal);
@@ -2315,62 +3097,12 @@
   btnCloseModalConfig.addEventListener('click', closeConfigModal);
   btnCancelModalConfig.addEventListener('click', closeConfigModal);
 
-  // Limpar
-  btnLimpar.addEventListener('click', ()=>{
-    if(!confirm('Limpar o orçamento atual e remover os dados salvos localmente?')) return;
-    
-    const nextNumber = orcamento.numero + 1;
-
-    localStorage.removeItem('orcamento_oficina_v1');
-    orcamento = {
-      numero: nextNumber,
-      dataEmissao: new Date().toISOString().slice(0,10),
-      validadeDias: orcamento.validadeDias || 7, 
-      oficina: orcamento.oficina, 
-      responsaveis: { mecanico: '', consultor: '' }, 
-      cliente: {},
-      veiculo: {},
-      diagnostico: '',
-      itens: [],
-      prazo: '',
-      garantia: '',
-      condicoes: '',
-      aprovacao: {},
-      obsInterna: '',
-      assinaturas: {
-        cliente: '',
-        mecanico: ''
-      },
-      veiculoCompleto: {
-        informacoesBasicas: {},
-        informacoesExtra: {},
-        informacoesFipe: {},
-        situacao: {}
-      }
-    };
-    
-    localStorage.setItem('orcamento_numero', String(orcamento.numero));
-    
-    // Limpar assinaturas
-    clearSignature('signature-client');
-    clearSignature('signature-mechanic');
-    
-    renderAll();
-  });
-
-  // Salvar
-  btnSalvar.addEventListener('click', ()=>{
-    persist();
-    alert('Orçamento salvo localmente (localStorage).');
-  });
-
-  // Exportar JSON
   btnExportJson.addEventListener('click', ()=>{
     persist();
     
     const orcNumFmt = String(orcamento.numero).padStart(4,'0');
     const fileNameSuffix = getFileNameSuffix();
-    const fileName = `Orçamento_${orcNumFmt}${fileNameSuffix}.json`;
+    const fileName = `Dados_OS_${orcNumFmt}${fileNameSuffix}.json`;
 
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(orcamento, null, 2));
     const dl = document.createElement('a');
@@ -2378,15 +3110,9 @@
     dl.setAttribute('download', fileName);
     dl.click();
     
-    // Incrementa o número para a próxima OS
-    orcamento.numero++;
-    localStorage.setItem('orcamento_numero', String(orcamento.numero));
-    renderAll(); 
-
-    alert(`Arquivo JSON exportado com sucesso com o nome: "${fileName}". O número da próxima OS foi atualizado.`);
+    alert(`Arquivo JSON exportado com sucesso com o nome: "${fileName}".`);
   });
   
-  // ao carregar
   init();
 </script>
 </body>
