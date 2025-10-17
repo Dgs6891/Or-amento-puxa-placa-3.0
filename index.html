@@ -504,7 +504,7 @@
   }
   .placa-consulta-container button {
     height: 42px;
-    margin-bottom: 6px;
+    margin-bottom: -0px;
     padding: 10px 16px;
     white-space: nowrap;
     font-size: 14px;
@@ -543,8 +543,27 @@
     background:#fff;
     max-width: 100%;
     box-sizing: border-box;
+    transition: all 0.2s ease;
+    min-height: 42px;
   }
-  textarea{ min-height:64px; resize:vertical; }
+  
+  /* ESTILOS PARA INPUTS DINÂMICOS */
+  .input-dinamico {
+    min-width: 100%;
+    resize: none;
+    overflow: hidden;
+  }
+  
+  .input-fixo {
+    width: auto;
+    min-width: 120px;
+  }
+  
+  textarea{ 
+    min-height:64px; 
+    resize:vertical; 
+    line-height: 1.4;
+  }
 
   .small{ font-size:12px; color:var(--muted) }
 
@@ -724,6 +743,11 @@
     background: white;
     cursor: crosshair;
     display: block;
+  }
+  .signature-canvas.locked {
+    cursor: default;
+    border: 1px solid var(--success);
+    background: #f0f9ff;
   }
   .signature-actions {
     display: flex;
@@ -953,23 +977,24 @@
       <div class="row">
         <div class="col col-nome">
           <label>Nome</label>
-          <input id="cliente-nome" type="text" placeholder="Nome completo">
+          <input id="cliente-nome" type="text" placeholder="Nome completo" class="input-dinamico">
         </div>
         <div class="col col-doc">
           <label>CPF / CNPJ</label>
-          <input id="cliente-doc" type="text" placeholder="000.000.000-00" inputmode="numeric">
+          <input id="cliente-doc" type="text" placeholder="000.000.000-00" inputmode="numeric" class="input-fixo">
         </div>
         <div class="col col-tel">
           <label>Telefone / WhatsApp</label>
-          <input id="cliente-tel" type="text" placeholder="(00) 9 0000-0000" inputmode="tel">
+          <input id="cliente-tel" type="text" placeholder="(00) 9 0000-0000" inputmode="tel" class="input-fixo">
         </div>
         
         <div class="placa-consulta-container">
           <div class="col col-placa">
             <label>Placa</label>
-            <input id="veic-placa" type="text" placeholder="ABC1A23" maxlength="8" inputmode="text" style="text-transform: uppercase;" class="placa-destaque">
+            <input id="veic-placa" type="text" placeholder="ABC1A23" maxlength="8" inputmode="text" style="text-transform: uppercase;" class="placa-destaque input-fixo">
           </div>
-          <button class="btn-placa-destaque" id="btn-consultar-placa" title="Consultar dados da placa">🔍 Buscar Placa</button>
+          
+          <button class="btn-placa-destaque" id="btn-consultar-placa" title="Consultar dados da placa">Buscar Placa 🔎</button>
         </div>
       </div>
 
@@ -977,30 +1002,30 @@
       <div class="row">
         <div class="col col-marca">
           <label>Marca</label>
-          <input id="veic-marca" type="text" placeholder="Ex: FIAT">
+          <input id="veic-marca" type="text" placeholder="Ex: FIAT" class="input-dinamico">
         </div>
         <div class="col col-modelo">
           <label>Modelo</label>
-          <input id="veic-modelo" type="text" placeholder="Ex: IDEA ADVENTURE 1.8">
+          <input id="veic-modelo" type="text" placeholder="Ex: IDEA ADVENTURE 1.8" class="input-dinamico">
         </div>
         <div class="col col-ano">
-          <label>Ano Fabricação</label>
-          <input id="veic-ano-fabricacao" type="text" placeholder="2011" inputmode="numeric" pattern="[0-9]*">
+          <label>Ano Fab:</label>
+          <input id="veic-ano-fabricacao" type="text" placeholder="2011" inputmode="numeric" pattern="[0-9]*" class="input-fixo">
         </div>
         <div class="col">
           <label>Ano Modelo</label>
-          <input id="veic-ano-modelo" type="text" placeholder="2012" inputmode="numeric" pattern="[0-9]*">
+          <input id="veic-ano-modelo" type="text" placeholder="2012" inputmode="numeric" pattern="[0-9]*" class="input-fixo">
         </div>
       </div>
       
       <div class="row" style="margin-top: 12px;">
         <div class="col col-cor">
           <label>Cor</label>
-          <input id="veic-cor" type="text" placeholder="Ex: CINZA">
+          <input id="veic-cor" type="text" placeholder="Ex: AZUL" class="input-dinamico">
         </div>
         <div class="col col-km">
           <label>Km</label>
-          <input id="veic-km" type="text" placeholder="123456" maxlength="6" inputmode="decimal" pattern="[0-9.,]*">
+          <input id="veic-km" type="text" placeholder="123.456" maxlength="6" inputmode="decimal" pattern="[0-9.,]*" class="input-fixo">
         </div>
         <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div>
         <div class="col" style="flex: 1 1 90px; visibility: hidden;"></div>
@@ -1008,7 +1033,7 @@
 
       <h3 style="margin:12px 0 8px 0">Diagnóstico</h3>
       <div>
-        <textarea id="diagnostico" placeholder="Descreva o problema relatado e observações do mecânico"></textarea>
+        <textarea id="diagnostico" placeholder="Descreva o problema relatado e observações do mecânico" class="input-dinamico"></textarea>
       </div>
     </div>
 
@@ -1027,11 +1052,11 @@
         <div class="row">
             <div class="col">
                 <label>Mecânico Responsável</label>
-                <input id="mecanico-resp" type="text" placeholder="Nome do Mecânico">
+                <input id="mecanico-resp" type="text" placeholder="Nome do Mecânico" class="input-dinamico">
             </div>
             <div class="col">
                 <label>Consultor Responsável</label>
-                <input id="consultor-resp" type="text" placeholder="Nome do Consultor / Vendedor">
+                <input id="consultor-resp" type="text" placeholder="Nome do Consultor / Vendedor" class="input-dinamico">
             </div>
         </div>
     </div>
@@ -1090,21 +1115,21 @@
       <div class="row">
         <div class="col">
           <label>Prazo estimado</label>
-          <input type="text" id="prazo" placeholder="Ex: 2 dias úteis">
+          <input type="text" id="prazo" placeholder="Ex: 2 dias úteis" class="input-dinamico">
         </div>
         <div class="col">
           <label>Validade do orçamento</label>
-          <input type="number" id="validade" min="1" value="7" inputmode="numeric"> <span class="small">dias</span>
+          <input type="number" id="validade" min="1" value="7" inputmode="numeric" class="input-fixo"> <span class="small">dias</span>
         </div>
         <div class="col">
           <label>Garantia serviço</label>
-          <input type="text" id="garantia" placeholder="Ex: 90 dias - serviços">
+          <input type="text" id="garantia" placeholder="Ex: 90 dias - serviços" class="input-dinamico">
         </div>
       </div>
 
       <div style="margin-top:12px;">
         <label>Condições de pagamento</label>
-        <input type="text" id="condicoes" placeholder="Ex: À vista PIX / Cartão / Parcelado">
+        <input type="text" id="condicoes" placeholder="Ex: À vista PIX / Cartão / Parcelado" class="input-dinamico">
       </div>
     </div>
 
@@ -1113,15 +1138,15 @@
       <div class="row">
         <div class="col">
           <label>Nome do aprovador</label>
-          <input id="aprovador" type="text" placeholder="Nome completo">
+          <input id="aprovador" type="text" placeholder="Nome completo" class="input-dinamico">
         </div>
         <div class="col">
           <label>Data de aprovação</label>
-          <input id="data-aprov" type="date">
+          <input id="data-aprov" type="date" class="input-fixo">
         </div>
         <div class="col">
           <label>Assinatura responsável</label>
-          <input id="assinatura" type="text" placeholder="Nome para registrar como assinatura">
+          <input id="assinatura" type="text" placeholder="Nome para registrar como assinatura" class="input-dinamico">
         </div>
       </div>
       
@@ -1152,7 +1177,7 @@
 
     <div class="card">
       <h3 style="margin:0 0 8px 0">Observações internas</h3>
-      <textarea id="obs-interna" placeholder="Observações para uso interno (data início, notas)"></textarea>
+      <textarea id="obs-interna" placeholder="Observações para uso interno (data início, notas)" class="input-dinamico"></textarea>
     </div>
 
     <footer>
@@ -1173,11 +1198,11 @@
       <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
         <div>
           <label>Descrição (Peça/Serviço)</label>
-          <input id="item-descricao" type="text" placeholder="Ex: Óleo de motor 5w40 / Troca de Correia">
+          <input id="item-descricao" type="text" placeholder="Ex: Óleo de motor 5w40 / Troca de Correia" class="input-dinamico">
         </div>
         <div>
           <label>Tipo</label>
-          <select id="item-tipo">
+          <select id="item-tipo" class="input-fixo">
             <option value="PECA">Peça</option>
             <option value="MDO">Mão de Obra (Serviço)</option>
           </select>
@@ -1185,16 +1210,16 @@
         <div class="row">
             <div class="col" style="min-width: 100px; flex: 1;">
                 <label>Quantidade</label>
-                <input id="item-qtd" type="text" inputmode="decimal" pattern="[0-9.,]*" value="1">
+                <input id="item-qtd" type="text" inputmode="decimal" pattern="[0-9.,]*" value="1" class="input-fixo">
             </div>
             <div class="col" style="min-width: 150px; flex: 2;">
                 <label>Valor Unitário (R$)</label>
-                <input id="item-valor" type="text" inputmode="decimal" placeholder="R$ 0,00" pattern="[0-9.,]*">
+                <input id="item-valor" type="text" inputmode="decimal" placeholder="R$ 0,00" pattern="[0-9.,]*" class="input-fixo">
             </div>
         </div>
         <div>
           <label>Observações do Item (Opcional)</label>
-          <textarea id="item-obs" placeholder="Detalhes técnicos, código da peça, etc."></textarea>
+          <textarea id="item-obs" placeholder="Detalhes técnicos, código da peça, etc." class="input-dinamico"></textarea>
         </div>
       </div>
       <div style="margin-top:20px; text-align:right;">
@@ -1214,15 +1239,15 @@
       <div class="modal-body" style="display:flex; flex-direction:column; gap:12px;">
         <div>
           <label>Nome da Oficina</label>
-          <input id="config-nome" type="text" placeholder="Nome da sua oficina">
+          <input id="config-nome" type="text" placeholder="Nome da sua oficina" class="input-dinamico">
         </div>
         <div>
           <label>Telefone</label>
-          <input id="config-telefone" type="text" placeholder="(00) 9 0000-0000" inputmode="tel">
+          <input id="config-telefone" type="text" placeholder="(00) 9 0000-0000" inputmode="tel" class="input-fixo">
         </div>
         <div>
           <label>Endereço</label>
-          <textarea id="config-endereco" placeholder="Endereço completo da oficina"></textarea>
+          <textarea id="config-endereco" placeholder="Endereço completo da oficina" class="input-dinamico"></textarea>
         </div>
       </div>
       <div style="margin-top:20px; text-align:right;">
@@ -2196,6 +2221,54 @@
     return `${day}/${month}/${year}`;
   }
 
+  // --- FUNÇÃO PARA EXPANSÃO DINÂMICA DOS INPUTS ---
+  function ajustarTamanhoInput(input) {
+    if (!input) return;
+    
+    // Para inputs de texto
+    if (input.tagName === 'INPUT' && input.type === 'text') {
+      const temp = document.createElement('span');
+      temp.style.visibility = 'hidden';
+      temp.style.position = 'absolute';
+      temp.style.whiteSpace = 'pre';
+      temp.style.font = window.getComputedStyle(input).font;
+      temp.textContent = input.value || input.placeholder;
+      
+      document.body.appendChild(temp);
+      const width = Math.min(temp.getBoundingClientRect().width + 20, window.innerWidth - 40);
+      document.body.removeChild(temp);
+      
+      input.style.width = '100%';
+      input.style.minWidth = Math.max(width, 120) + 'px';
+    }
+    
+    // Para textareas
+    if (input.tagName === 'TEXTAREA') {
+      input.style.height = 'auto';
+      input.style.height = (input.scrollHeight) + 'px';
+    }
+  }
+
+  // Inicializar ajuste de tamanho para todos os inputs dinâmicos
+  function inicializarInputsDinamicos() {
+    const inputsDinamicos = document.querySelectorAll('.input-dinamico');
+    
+    inputsDinamicos.forEach(input => {
+      // Ajustar inicialmente
+      ajustarTamanhoInput(input);
+      
+      // Ajustar ao digitar
+      input.addEventListener('input', function() {
+        ajustarTamanhoInput(this);
+      });
+      
+      // Ajustar ao carregar a página
+      window.addEventListener('load', function() {
+        setTimeout(() => ajustarTamanhoInput(input), 100);
+      });
+    });
+  }
+
   // --- LÓGICA DE NEGÓCIO ---
   function calcularTotais() {
     let totalPecas = 0;
@@ -2263,6 +2336,12 @@
     }
 
     itemModal.style.display = 'flex';
+    
+    // Ajustar tamanho dos inputs do modal
+    setTimeout(() => {
+      ajustarTamanhoInput(itemDescricaoInput);
+      ajustarTamanhoInput(itemObsTextarea);
+    }, 100);
   }
 
   function closeItemModal() {
@@ -2275,6 +2354,12 @@
       configNomeInput.value = orcamento.oficina.nome || '';
       configTelefoneInput.value = orcamento.oficina.telefone || '';
       configEnderecoTextarea.value = orcamento.oficina.endereco || '';
+      
+      // Ajustar tamanho dos inputs do modal de configuração
+      setTimeout(() => {
+        ajustarTamanhoInput(configNomeInput);
+        ajustarTamanhoInput(configEnderecoTextarea);
+      }, 100);
   }
 
   function closeConfigModal() {
@@ -2452,23 +2537,66 @@
     renderVehicleInfo();
   }
 
-  // --- FUNÇÕES DE ASSINATURA DIGITAL ---
+  // --- FUNÇÕES DE ASSINATURA DIGITAL MELHORADAS ---
   function initSignatureCanvas() {
-  const canvases = [signatureClient, signatureMechanic];
+    const canvases = [signatureClient, signatureMechanic];
+    
+    canvases.forEach(canvas => {
+      canvas.width = 400;
+      canvas.height = 150;
+      
+      const ctx = canvas.getContext('2d');
+      // COR AZUL PARA ASSINATURA
+      ctx.strokeStyle = '#0f62fe';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Adicionar event listeners para desenho
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+      
+      canvas.addEventListener('touchstart', startDrawingTouch);
+      canvas.addEventListener('touchmove', drawTouch);
+      canvas.addEventListener('touchend', stopDrawing);
+      
+      // Verificar se já tem assinatura salva
+      if (canvas.id === 'signature-client' && orcamento.assinaturas.cliente) {
+        drawSignatureImage(canvas, orcamento.assinaturas.cliente);
+        lockCanvas(canvas);
+      } else if (canvas.id === 'signature-mechanic' && orcamento.assinaturas.mecanico) {
+        drawSignatureImage(canvas, orcamento.assinaturas.mecanico);
+        lockCanvas(canvas);
+      }
+    });
+  }
   
-  canvases.forEach(canvas => {
-    canvas.width = 400;
-    canvas.height = 150;
+  // BLOQUEAR CANVAS APÓS SALVAR
+  function lockCanvas(canvas) {
+    canvas.classList.add('locked');
+    canvas.style.cursor = 'default';
     
-    const ctx = canvas.getContext('2d');
-    // MUDANÇA: Usar cor hexadecimal azul
-    ctx.strokeStyle = '#0f62fe'; // Ou qualquer cor hexadecimal que você quiser
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    // Remover event listeners de desenho
+    canvas.removeEventListener('mousedown', startDrawing);
+    canvas.removeEventListener('mousemove', draw);
+    canvas.removeEventListener('mouseup', stopDrawing);
+    canvas.removeEventListener('mouseout', stopDrawing);
     
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.removeEventListener('touchstart', startDrawingTouch);
+    canvas.removeEventListener('touchmove', drawTouch);
+    canvas.removeEventListener('touchend', stopDrawing);
+  }
+  
+  // DESBLOQUEAR CANVAS APÓS LIMPAR
+  function unlockCanvas(canvas) {
+    canvas.classList.remove('locked');
+    canvas.style.cursor = 'crosshair';
     
+    // Adicionar event listeners de desenho
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
@@ -2477,8 +2605,7 @@
     canvas.addEventListener('touchstart', startDrawingTouch);
     canvas.addEventListener('touchmove', drawTouch);
     canvas.addEventListener('touchend', stopDrawing);
-  });
-}
+  }
   
   function drawSignatureImage(canvas, dataURL) {
       const ctx = canvas.getContext('2d');
@@ -2491,6 +2618,8 @@
   }
   
   function startDrawing(e) {
+    if (e.target.classList.contains('locked')) return;
+    
     isDrawing = true;
     currentCanvas = e.target;
     const rect = currentCanvas.getBoundingClientRect();
@@ -2499,6 +2628,8 @@
   }
   
   function startDrawingTouch(e) {
+    if (e.target.classList.contains('locked')) return;
+    
     e.preventDefault();
     isDrawing = true;
     currentCanvas = e.target;
@@ -2509,7 +2640,7 @@
   }
   
   function draw(e) {
-    if (!isDrawing || currentCanvas !== e.target) return;
+    if (!isDrawing || currentCanvas !== e.target || e.target.classList.contains('locked')) return;
     
     const rect = currentCanvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -2526,9 +2657,9 @@
   }
   
   function drawTouch(e) {
-    e.preventDefault();
-    if (!isDrawing || currentCanvas !== e.target) return;
+    if (!isDrawing || currentCanvas !== e.target || e.target.classList.contains('locked')) return;
     
+    e.preventDefault();
     const rect = currentCanvas.getBoundingClientRect();
     const touch = e.touches[0];
     const x = touch.clientX - rect.left;
@@ -2555,6 +2686,9 @@
     
     canvas.removeAttribute('data-has-signature');
     
+    // Desbloquear o canvas para permitir novo desenho
+    unlockCanvas(canvas);
+    
     if (canvasId === 'signature-client') {
       orcamento.assinaturas.cliente = '';
     } else if (canvasId === 'signature-mechanic') {
@@ -2570,6 +2704,9 @@
     
     canvas.setAttribute('data-has-signature', 'true');
     
+    // Bloquear o canvas após salvar
+    lockCanvas(canvas);
+    
     if (canvasId === 'signature-client') {
       orcamento.assinaturas.cliente = dataURL;
     } else if (canvasId === 'signature-mechanic') {
@@ -2584,11 +2721,13 @@
     if (orcamento.assinaturas.cliente) {
       drawSignatureImage(signatureClient, orcamento.assinaturas.cliente);
       signatureClient.setAttribute('data-has-signature', 'true');
+      lockCanvas(signatureClient);
     }
     
     if (orcamento.assinaturas.mecanico) {
       drawSignatureImage(signatureMechanic, orcamento.assinaturas.mecanico);
       signatureMechanic.setAttribute('data-has-signature', 'true');
+      lockCanvas(signatureMechanic);
     }
   }
 
@@ -2856,8 +2995,8 @@
       const totalGeral = totalPecas + totalMDO;
       
       texto += `\n*TOTAIS:*\n`;
-      texto += `Peças: ${fmt.format(totalPecas)}\n`;
-      texto += `Mão de Obra: ${fmt.format(totalMDO)}\n`;
+      texto += `*PEÇAS: ${fmt.format(totalPecas)}*\n`;
+      texto += `*MÃO DE OBRA: ${fmt.format(totalMDO)}*\n`;
       texto += `*TOTAL GERAL: ${fmt.format(totalGeral)}*\n\n`;
       
       texto += `*CONDIÇÕES:*\n`;
@@ -2986,6 +3125,9 @@
     initSignatureCanvas();
     setTimeout(loadSignatures, 100);
     
+    // Inicializar inputs dinâmicos
+    inicializarInputsDinamicos();
+    
     renderAll();
   }
   
@@ -3029,6 +3171,14 @@
     renderItens();
     calcularTotais();
     renderVehicleInfo();
+    
+    // Ajustar tamanho dos inputs após renderizar
+    setTimeout(() => {
+      const inputsDinamicos = document.querySelectorAll('.input-dinamico');
+      inputsDinamicos.forEach(input => {
+        ajustarTamanhoInput(input);
+      });
+    }, 100);
   }
   
   function persist(){
