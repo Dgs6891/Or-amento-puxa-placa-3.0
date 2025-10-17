@@ -923,6 +923,29 @@
           padding: 10px 14px;
       }
   }
+
+
+   /* SOLUÇÃO ROBUSTA - ADICIONE AO FINAL DO SEU CSS */
+@media (min-width: 768px) {
+    .info-group .row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+    }
+    
+    .info-group .row .col.col-cor,
+    .info-group .row .col.col-km {
+        grid-column: span 1;
+    }
+}
+
+/* Garantir que inputs não fiquem muito pequenos */
+.info-group .row .col {
+    min-width: 140px !important;
+}
+
+
+
 </style>
 </head>
 <body>
