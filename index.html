@@ -163,7 +163,9 @@
     border-top: 1px solid var(--border);
     display: flex;
     gap: 8px;
+    align-items: center;
     background: white;
+    position: relative;
   }
 
   .chat-input {
@@ -191,6 +193,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
 
   .chat-voice.listening {
@@ -487,11 +490,13 @@
       flex: 0.7;
   }
 
+  /* CORREÇÃO: Alinhamento do input placa com botão buscar */
   .placa-consulta-container {
     display: flex;
     gap: 8px;
     align-items: flex-end;
     flex-wrap: wrap;
+    width: 100%;
   }
   .placa-consulta-container .col {
     flex: 1;
@@ -505,6 +510,7 @@
     font-size: 14px;
     font-weight: 600;
     flex-shrink: 0;
+    align-self: flex-end;
   }
 
   .placa-destaque {
@@ -849,90 +855,50 @@
     }
   }
 
+  /* Estilo para o botão fechar dentro do input container */
+  .chat-input-container .chat-close {
+      position: static;
+      transform: none;
+      background: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+  }
 
-.chat-input-container {
-    padding: 15px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-    align-items: center; /* Adicione esta linha */
-    background: white;
-    position: relative; /* Adicione esta linha */
-}
+  .chat-input-container .chat-close:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+  }
 
-/* Estilo para o botão fechar dentro do input container */
-.chat-input-container .chat-close {
-    position: static; /* Remove o posicionamento absoluto */
-    transform: none; /* Remove a transformação */
-    background: var(--danger); /* Destaque em vermelho */
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-}
-
-.chat-input-container .chat-close:hover {
-    background: #dc2626; /* Vermelho mais escuro no hover */
-    transform: scale(1.05);
-}
-
-/* Ajuste o input para ocupar o espaço restante */
-.chat-input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: 25px;
-    font-size: 16px;
-    outline: none;
-}
-
-/* Mantenha os estilos originais dos outros botões */
-.chat-send, .chat-voice {
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-/* Ajuste para mobile */
-@media (max-width: 768px) {
-    .chat-input-container {
-        padding: 12px;
-        gap: 6px;
-    }
-    
-    .chat-input-container .chat-close,
-    .chat-send, 
-    .chat-voice {
-        width: 44px;
-        height: 44px;
-        font-size: 20px;
-    }
-    
-    .chat-input {
-        font-size: 16px;
-        padding: 10px 14px;
-    }
-}
-
-
-
+  /* Ajuste para mobile */
+  @media (max-width: 768px) {
+      .chat-input-container {
+          padding: 12px;
+          gap: 6px;
+      }
+      
+      .chat-input-container .chat-close,
+      .chat-send, 
+      .chat-voice {
+          width: 44px;
+          height: 44px;
+          font-size: 20px;
+      }
+      
+      .chat-input {
+          font-size: 16px;
+          padding: 10px 14px;
+      }
+  }
 </style>
 </head>
 <body>
@@ -941,23 +907,20 @@
   <button id="open-chat" class="chat-toggle no-print">💬</button>
 
   <!-- Container do Chat em tela cheia -->
-  <!-- Container do Chat em tela cheia -->
-<div id="chat-container" class="chat-container">
-  <div class="chat-header">
-    <h4>🤖 Assistente de Orçamento</h4>
-    <!-- REMOVA O BOTÃO FECHAR DAQUI -->
+  <div id="chat-container" class="chat-container">
+    <div class="chat-header">
+      <h4>🤖 Assistente de Orçamento</h4>
+    </div>
+    <div id="chat-messages" class="chat-messages"></div>
+    <div class="chat-input-container">
+      <button class="chat-close" id="close-chat" title="Fechar chat">×</button>
+      <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua resposta ou use o microfone..." autocomplete="off">
+      <button id="chat-voice" class="chat-voice" title="Falar">🎤</button>
+      <button id="send-chat" class="chat-send">➤</button>
+    </div>
+    <!-- BOTÃO ALTERNATIVO PARA FECHAR NO MOBILE -->
+    <button class="chat-mobile-close" id="close-chat-mobile">Fechar Assistente</button>
   </div>
-  <div id="chat-messages" class="chat-messages"></div>
-  <div class="chat-input-container">
-    <!-- ADICIONE O BOTÃO FECHAR AQUI -->
-    <button class="chat-close" id="close-chat" title="Fechar chat">×</button>
-    <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua resposta ou use o microfone..." autocomplete="off">
-    <button id="chat-voice" class="chat-voice" title="Falar">🎤</button>
-    <button id="send-chat" class="chat-send">➤</button>
-  </div>
-  <!-- BOTÃO ALTERNATIVO PARA FECHAR NO MOBILE (mantenha este) -->
-  <button class="chat-mobile-close" id="close-chat-mobile">Fechar Assistente</button>
-</div>
 
   <div class="fixed-actions no-print">
       <button id="btn-config-oficina" title="Configurações da Oficina">⚙️</button>
@@ -967,7 +930,7 @@
   </div>
 
   <div class="container">
-    <!-- Conteúdo original da aplicação 1 -->
+    <!-- Conteúdo original da aplicação -->
     <header class="top">
       <div class="brand" id="brand-container">
         <div class="logo-container">
@@ -1302,7 +1265,7 @@
       this.recognition = null;
       this.currentItem = null;
       
-      // CORREÇÃO: Adicionadas perguntas sobre CPF e KM
+      // FLUXO COMPLETO DO CHATBOT COM TODAS AS ETAPAS
       this.steps = [
         {
           question: "🚗 **Vamos criar um orçamento!** Qual a **placa do veículo**?",
@@ -1331,6 +1294,41 @@
           type: 'telefone',
           skipText: "Pular telefone",
           voiceHint: "Diga o telefone com DDD, por exemplo: onze nove nove nove oito sete seis cinco quatro três"
+        },
+        {
+          question: "🏭 Qual a **marca do veículo**?",
+          field: 'veiculoMarca',
+          type: 'text',
+          skipText: "Pular marca",
+          voiceHint: "Diga a marca do veículo, por exemplo: FIAT"
+        },
+        {
+          question: "🚙 Qual o **modelo do veículo**?",
+          field: 'veiculoModelo',
+          type: 'text',
+          skipText: "Pular modelo",
+          voiceHint: "Diga o modelo do veículo, por exemplo: IDEA ADVENTURE"
+        },
+        {
+          question: "📅 Qual o **ano de fabricação** do veículo?",
+          field: 'veiculoAnoFabricacao',
+          type: 'ano',
+          skipText: "Pular ano fabricação",
+          voiceHint: "Diga o ano de fabricação, por exemplo: dois mil e onze"
+        },
+        {
+          question: "🗓️ Qual o **ano do modelo** do veículo?",
+          field: 'veiculoAnoModelo',
+          type: 'ano',
+          skipText: "Pular ano modelo",
+          voiceHint: "Diga o ano do modelo, por exemplo: dois mil e doze"
+        },
+        {
+          question: "🎨 Qual a **cor do veículo**?",
+          field: 'veiculoCor',
+          type: 'text',
+          skipText: "Pular cor",
+          voiceHint: "Diga a cor do veículo, por exemplo: cinza"
         },
         {
           question: "📊 Qual a **quilometragem atual** do veículo?",
@@ -1373,6 +1371,20 @@
           type: 'text',
           skipText: "Pular condições",
           voiceHint: "Diga as condições de pagamento"
+        },
+        {
+          question: "👨‍🔧 Qual o **nome do mecânico responsável**?",
+          field: 'mecanico',
+          type: 'text',
+          skipText: "Pular mecânico",
+          voiceHint: "Diga o nome do mecânico responsável"
+        },
+        {
+          question: "👨‍💼 Qual o **nome do consultor responsável**?",
+          field: 'consultor',
+          type: 'text',
+          skipText: "Pular consultor",
+          voiceHint: "Diga o nome do consultor responsável"
         },
         {
           question: "✅ **Orçamento completo!** O que deseja fazer?",
@@ -1418,7 +1430,9 @@
       const currentStep = this.getCurrentQuestion();
       
       if (currentStep.type === 'itens' && this.currentItem) {
-        if (!this.currentItem.valor) {
+        if (!this.currentItem.tipo) {
+          this.processItemTipo(transcript);
+        } else if (!this.currentItem.valor) {
           this.processItemValor(transcript);
         } else if (!this.currentItem.quantidade) {
           this.processItemQuantidade(transcript);
@@ -1477,7 +1491,8 @@
           this.processDocumento(answer);
           break;
         case 'km':
-          this.processKm(answer);
+        case 'ano':
+          this.processNumero(answer, currentStep.field);
           break;
         case 'itens':
           this.processItem(answer);
@@ -1510,7 +1525,25 @@
           if (typeof consultarPlaca === 'function') {
             consultarPlaca();
           }
-          this.addBotMessage("✅ **Dados do veículo preenchidos automaticamente!**");
+          this.addBotMessage("✅ **Consulta realizada!** Verificando dados obtidos...");
+          
+          // VERIFICA SE OS DADOS DO VEÍCULO FORAM PREENCHIDOS PELA API
+          setTimeout(() => {
+            const veicMarca = document.getElementById('veic-marca').value;
+            const veicModelo = document.getElementById('veic-modelo').value;
+            
+            if (veicMarca && veicModelo) {
+              this.addBotMessage("✅ **Dados do veículo preenchidos pela API!** Pulando para informações adicionais...");
+              // PULA PARA O PASSO DA QUILOMETRAGEM (KM)
+              this.currentStep = 9; // Índice do passo da quilometragem
+            } else {
+              this.addBotMessage("ℹ️ **Dados do veículo não encontrados na API.** Continuaremos preenchendo manualmente...");
+              // CONTINUA COM O FLUXO NORMAL (NOME DO CLIENTE)
+              this.currentStep = 1;
+            }
+            
+            this.askCurrentQuestion();
+          }, 2000);
         }, 1500);
       }
     }
@@ -1533,21 +1566,36 @@
       }
     }
 
-    processKm(km) {
-      if (km && km.trim()) {
-        const kmConvertido = this.convertWordsToNumbers(km);
-        const kmLimpo = kmConvertido.replace(/[^0-9]/g, '');
+    processNumero(valor, campo) {
+      if (valor && valor.trim()) {
+        const valorConvertido = this.convertWordsToNumbers(valor);
+        const valorLimpo = valorConvertido.replace(/[^0-9]/g, '');
         
-        document.getElementById('veic-km').value = kmLimpo;
-        persist();
-        this.addBotMessage("✅ **Quilometragem registrada com sucesso!**");
+        const fieldMap = {
+          'veiculoKm': 'veic-km',
+          'veiculoAnoFabricacao': 'veic-ano-fabricacao',
+          'veiculoAnoModelo': 'veic-ano-modelo'
+        };
+
+        if (fieldMap[campo]) {
+          document.getElementById(fieldMap[campo]).value = valorLimpo;
+          persist();
+          this.addBotMessage("✅ **Valor registrado com sucesso!**");
+        }
       }
     }
 
     convertWordsToNumbers(text) {
       const numberMap = {
         'zero': '0', 'um': '1', 'dois': '2', 'três': '3', 'quatro': '4',
-        'cinco': '5', 'seis': '6', 'sete': '7', 'oito': '8', 'nove': '9'
+        'cinco': '5', 'seis': '6', 'sete': '7', 'oito': '8', 'nove': '9',
+        'dez': '10', 'onze': '11', 'doze': '12', 'treze': '13', 'quatorze': '14',
+        'quinze': '15', 'dezesseis': '16', 'dezessete': '17', 'dezoito': '18', 'dezenove': '19',
+        'vinte': '20', 'trinta': '30', 'quarenta': '40', 'cinquenta': '50',
+        'sessenta': '60', 'setenta': '70', 'oitenta': '80', 'noventa': '90',
+        'cem': '100', 'duzentos': '200', 'trezentos': '300', 'quatrocentos': '400',
+        'quinhentos': '500', 'seiscentos': '600', 'setecentos': '700', 'oitocentos': '800',
+        'novecentos': '900', 'mil': '1000'
       };
       
       return text.replace(
@@ -1559,9 +1607,23 @@
     processItem(descricao) {
       if (descricao && descricao.trim() && !descricao.toLowerCase().includes('próximo') && !descricao.toLowerCase().includes('proximo')) {
         this.currentItem = { descricao: descricao };
-        this.addBotMessage(`💵 Qual o **valor** para **${descricao}**?`);
+        this.addBotMessage(`📋 Este item é **peça** ou **mão de obra**? Digite "peça" ou "serviço":`);
       } else {
         this.skipStepAndContinue();
+      }
+    }
+
+    processItemTipo(tipo) {
+      if (this.currentItem) {
+        if (tipo.toLowerCase().includes('peça') || tipo.toLowerCase().includes('peca')) {
+          this.currentItem.tipo = 'PECA';
+          this.addBotMessage(`💵 Qual o **valor** para **${this.currentItem.descricao}**?`);
+        } else if (tipo.toLowerCase().includes('serviço') || tipo.toLowerCase().includes('servico') || tipo.toLowerCase().includes('mão de obra') || tipo.toLowerCase().includes('mao de obra')) {
+          this.currentItem.tipo = 'MDO';
+          this.addBotMessage(`💵 Qual o **valor** para **${this.currentItem.descricao}**?`);
+        } else {
+          this.addBotMessage("❌ **Tipo não reconhecido.** Digite 'peça' ou 'serviço':");
+        }
       }
     }
 
@@ -1587,19 +1649,19 @@
     }
 
     finalizarItem() {
-      if (this.currentItem && this.currentItem.descricao && this.currentItem.valor && this.currentItem.quantidade) {
-        this.adicionarItemTabela(this.currentItem.descricao, this.currentItem.quantidade, this.currentItem.valor);
-        this.addBotMessage(`✅ **Item adicionado!**\n\n${this.currentItem.quantidade}x ${this.currentItem.descricao} - R$ ${this.currentItem.valor.toFixed(2)}`);
+      if (this.currentItem && this.currentItem.descricao && this.currentItem.tipo && this.currentItem.valor && this.currentItem.quantidade) {
+        this.adicionarItemTabela(this.currentItem.descricao, this.currentItem.tipo, this.currentItem.quantidade, this.currentItem.valor);
+        this.addBotMessage(`✅ **Item adicionado com sucesso!**\n\n${this.currentItem.quantidade}x ${this.currentItem.descricao} (${this.currentItem.tipo === 'PECA' ? 'Peça' : 'Mão de Obra'}) - R$ ${this.currentItem.valor.toFixed(2)}`);
         
         this.addBotMessage("📝 Quer adicionar **mais um item**? Digite o nome ou **'próximo'** para continuar.");
         this.currentItem = null;
       }
     }
 
-    adicionarItemTabela(descricao, quantidade, valor) {
+    adicionarItemTabela(descricao, tipo, quantidade, valor) {
       const novoItem = {
         descricao: descricao,
-        tipo: descricao.toLowerCase().includes('mão de obra') || descricao.toLowerCase().includes('serviço') ? 'MDO' : 'PECA',
+        tipo: tipo,
         qtd: parseFloat(quantidade),
         valor: parseFloat(valor),
         obs: 'Adicionado via assistente'
@@ -1635,7 +1697,7 @@
         setTimeout(() => this.askCurrentQuestion(), 1000);
       } else if (resposta.includes('adicionar') || resposta.includes('mais') || resposta.includes('item')) {
         this.addBotMessage("🛠️ **Vamos adicionar mais um item!** Digite o nome do próximo item:");
-        this.currentStep = 6; // Volta para o passo de itens
+        this.currentStep = 11; // Volta para o passo de itens
       } else {
         this.addBotMessage("❓ **Comando não reconhecido.** Escolha uma das opções abaixo:");
         this.showFinalActions();
@@ -1657,17 +1719,41 @@
         const fieldMap = {
           'clienteNome': 'cliente-nome',
           'clienteTelefone': 'cliente-tel',
+          'veiculoMarca': 'veic-marca',
+          'veiculoModelo': 'veic-modelo',
+          'veiculoCor': 'veic-cor',
           'diagnostico': 'diagnostico',
           'prazo': 'prazo',
           'garantia': 'garantia',
-          'condicoes': 'condicoes'
+          'condicoes': 'condicoes',
+          'mecanico': 'mecanico-resp',
+          'consultor': 'consultor-resp'
         };
 
         if (fieldMap[field]) {
           document.getElementById(fieldMap[field]).value = value;
           persist();
+          this.addBotMessage(`✅ **${this.getFieldLabel(field)} registrado com sucesso!**`);
         }
       }
+    }
+
+    getFieldLabel(field) {
+      const labels = {
+        'clienteNome': 'nome do cliente',
+        'clienteTelefone': 'telefone',
+        'veiculoMarca': 'marca do veículo',
+        'veiculoModelo': 'modelo do veículo',
+        'veiculoCor': 'cor do veículo',
+        'diagnostico': 'diagnóstico',
+        'prazo': 'prazo estimado',
+        'garantia': 'garantia',
+        'condicoes': 'condições de pagamento',
+        'mecanico': 'mecânico responsável',
+        'consultor': 'consultor responsável'
+      };
+      
+      return labels[field] || field;
     }
 
     formatPlaca(placa) {
@@ -1763,7 +1849,7 @@
         { text: '📄 Gerar PDF', class: 'success', action: () => this.gerarPDFDiretamente() },
         { text: '💬 WhatsApp', class: 'primary', action: () => setTimeout(() => btnWhatsapp.click(), 500) },
         { text: '📋 Copiar Texto', class: 'primary', action: () => setTimeout(() => btnCopyAll.click(), 500) },
-        { text: '🛠️ Adicionar Item', class: 'primary', action: () => { this.currentStep = 6; this.askCurrentQuestion(); } },
+        { text: '🛠️ Adicionar Item', class: 'primary', action: () => { this.currentStep = 11; this.askCurrentQuestion(); } },
         { text: '🖊️ Assinar', class: 'primary', action: () => {
           const signatureSection = document.querySelector('.signature-section');
           if (signatureSection) signatureSection.scrollIntoView({ behavior: 'smooth' });
@@ -1886,7 +1972,9 @@
       const currentStep = chatbot.getCurrentQuestion();
       
       if (currentStep.type === 'itens' && chatbot.currentItem) {
-        if (!chatbot.currentItem.valor) {
+        if (!chatbot.currentItem.tipo) {
+          chatbot.processItemTipo(message);
+        } else if (!chatbot.currentItem.valor) {
           chatbot.processItemValor(message);
         } else if (!chatbot.currentItem.quantidade) {
           chatbot.processItemQuantidade(message);
